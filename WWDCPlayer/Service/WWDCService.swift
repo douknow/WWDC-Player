@@ -16,6 +16,10 @@ class WWDCService {
         case error
     }
     
+    enum Endpoint {
+        static let basic = URL(string: "https://developer.apple.com")!
+    }
+    
     let allVideoURL = URL(string: "https://developer.apple.com/videos/all-videos/")!
     
     func allVideos() -> AnyPublisher<[Group], Error> {
@@ -68,6 +72,34 @@ class WWDCService {
             .mapError({ _ in
                 Error.error
             })
+            .eraseToAnyPublisher()
+    }
+    
+    func videoDetail(by video: Video) -> AnyPublisher<VideoDetail, Error> {
+        let url = Endpoint.basic.appendingPathComponent(video.relaveURLStr)
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .tryMap({ data -> VideoDetail in
+                guard let html = String(data: data, encoding: .utf8) else {
+                    throw Error.error
+                }
+                
+                let doc = try SwiftSoup.parse(html)
+                let m3u8URLStr = try doc.select("video").attr("src")
+                guard let m3u8URL = URL(string: m3u8URLStr) else {
+                    throw Error.error
+                }
+                
+                let infomation = try doc.select("ul.supplements > li.supplement.details")
+                let title = try infomation.select("h1").first()!.text()
+                let description = try infomation.select("p").first()!.text()
+                
+                let videoDetail = VideoDetail(title: title, description: description, m3u8URL: m3u8URL)
+                return videoDetail
+            })
+            .mapError { _ in 
+                Error.error
+            }
             .eraseToAnyPublisher()
     }
     

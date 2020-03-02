@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  VideoDetailViewController.swift
 //  WWDCPlayer
 //
 //  Created by Xianzhao Han on 2020/3/2.
@@ -9,34 +9,28 @@
 import UIKit
 import Combine
 
-class HomeViewController: UITableViewController {
+class VideoDetailViewController: UITableViewController {
     
-    enum Identifier {
-        static let videoCell = "VideoItemCell"
-    }
-    
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet var indicator: UIActivityIndicatorView!
+    @IBOutlet weak var videoURL: UILabel!
     
     @Published var isLoading = false
     
+    var video: Video!
     let service = WWDCService()
     var subscriptions = Set<AnyCancellable>()
-    var groups: [Group] = []
-    var selectedVideo: Video?
-    var subscription = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
         
-        let nib = UINib(nibName: "VideoItemTableViewCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: Identifier.videoCell)
+        title = video.title
         
         $isLoading
-            .sink(receiveCompletion: { completion in
-                // handle error
-            }) { [unowned self] isLoading in
+            .sink { [unowned self] isLoading in
                 if isLoading {
                     self.indicator.isHidden = false
                     self.indicator.startAnimating()
@@ -45,8 +39,8 @@ class HomeViewController: UITableViewController {
                 }
             }
             .store(in: &subscriptions)
-
-        fetchData()
+        
+        self.loadData()
     }
     
     func setupView() {
@@ -56,68 +50,38 @@ class HomeViewController: UITableViewController {
         }
     }
     
-    func fetchData() {
+    func loadData() {
         isLoading = true
-        service.allVideos()
+        
+        service.videoDetail(by: video)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [unowned self] completion in
                 // handle error
-            }) { [unowned self] groups in
-                print("group's count: \(groups.count)")
-                
-                self.groups = groups
-                self.tableView.reloadData()
+            }) { [unowned self] videoDetail in
                 self.isLoading = false
+                self.titleLabel.text = videoDetail.title
+                self.descriptionLabel.text = videoDetail.description
+                self.videoURL.text = videoDetail.m3u8URL.absoluteString
+                self.tableView.reloadData()
             }
             .store(in: &subscriptions)
     }
 
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return groups.count
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return groups[section].videos.count
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return groups[section].title
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.videoCell, for: indexPath) as? VideoItemTableViewCell else {
-            fatalError()
-        }
-        
-        let group = groups[indexPath.section]
-        let video = group.videos[indexPath.row]
-        cell.config(video)
-        return cell
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowDetail", 
-            let vc = segue.destination as? VideoDetailViewController,
-            let video = selectedVideo {
-            vc.video = video
-        }
-    }
-    
-    // MARK: - Table view delegate
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return isLoading ? 0 : 2
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let video = groups[indexPath.section].videos[indexPath.row]
-        selectedVideo = video
-        performSegue(withIdentifier: "ShowDetail", sender: nil)
+        
+        switch (indexPath.section, indexPath.row) {
+        case (1, 0):
+            print(videoURL.text ?? "NIL")
+        default: 
+            break
+        }
     }
 
     /*

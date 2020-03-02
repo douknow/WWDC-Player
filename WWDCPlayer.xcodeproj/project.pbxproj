@@ -10,6 +10,9 @@
 		5C231FA4240CE53C001E25A6 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA3240CE53C001E25A6 /* SwiftSoup */; };
 		5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA6240CF33A001E25A6 /* Kingfisher */; };
 		5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FA8240D07E0001E25A6 /* HomeViewController.swift */; };
+		5C231FAB240D2C45001E25A6 /* VideoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */; };
+		5C231FAE240D3CEB001E25A6 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FAD240D3CEB001E25A6 /* SnapKit */; };
+		5C231FB0240D4A3B001E25A6 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FAF240D4A3B001E25A6 /* UIView+.swift */; };
 		5CD88D55240CDEAC00948ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D54240CDEAC00948ADC /* AppDelegate.swift */; };
 		5CD88D57240CDEAC00948ADC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */; };
 		5CD88D59240CDEAC00948ADC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D58240CDEAC00948ADC /* ViewController.swift */; };
@@ -24,6 +27,8 @@
 
 /* Begin PBXFileReference section */
 		5C231FA8240D07E0001E25A6 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDetailViewController.swift; sourceTree = "<group>"; };
+		5C231FAF240D4A3B001E25A6 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD88D54240CDEAC00948ADC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -44,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C231FAE240D3CEB001E25A6 /* SnapKit in Frameworks */,
 				5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */,
 				5C231FA4240CE53C001E25A6 /* SwiftSoup in Frameworks */,
 			);
@@ -77,6 +83,8 @@
 				5CD88D54240CDEAC00948ADC /* AppDelegate.swift */,
 				5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */,
 				5C231FA8240D07E0001E25A6 /* HomeViewController.swift */,
+				5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */,
+				5C231FAF240D4A3B001E25A6 /* UIView+.swift */,
 				5CD88D58240CDEAC00948ADC /* ViewController.swift */,
 				5CD88D69240CDF4E00948ADC /* VideoItemTableViewCell.swift */,
 				5CD88D6A240CDF4E00948ADC /* VideoItemTableViewCell.xib */,
@@ -123,6 +131,7 @@
 			packageProductDependencies = (
 				5C231FA3240CE53C001E25A6 /* SwiftSoup */,
 				5C231FA6240CF33A001E25A6 /* Kingfisher */,
+				5C231FAD240D3CEB001E25A6 /* SnapKit */,
 			);
 			productName = WWDCPlayer;
 			productReference = 5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */;
@@ -155,6 +164,7 @@
 			packageReferences = (
 				5C231FA2240CE53C001E25A6 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				5C231FA5240CF33A001E25A6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				5C231FAC240D3CEB001E25A6 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 5CD88D52240CDEAC00948ADC /* Products */;
 			projectDirPath = "";
@@ -187,8 +197,10 @@
 				5CD88D6B240CDF4E00948ADC /* VideoItemTableViewCell.swift in Sources */,
 				5CD88D59240CDEAC00948ADC /* ViewController.swift in Sources */,
 				5CD88D72240CE23B00948ADC /* WWDCService.swift in Sources */,
+				5C231FAB240D2C45001E25A6 /* VideoDetailViewController.swift in Sources */,
 				5CD88D55240CDEAC00948ADC /* AppDelegate.swift in Sources */,
 				5CD88D57240CDEAC00948ADC /* SceneDelegate.swift in Sources */,
+				5C231FB0240D4A3B001E25A6 /* UIView+.swift in Sources */,
 				5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */,
 				5CD88D6F240CE13800948ADC /* Video.swift in Sources */,
 			);
@@ -412,6 +424,14 @@
 				minimumVersion = 5.13.2;
 			};
 		};
+		5C231FAC240D3CEB001E25A6 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -424,6 +444,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5C231FA5240CF33A001E25A6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		5C231FAD240D3CEB001E25A6 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5C231FAC240D3CEB001E25A6 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

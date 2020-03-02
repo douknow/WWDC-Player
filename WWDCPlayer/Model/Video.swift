@@ -23,3 +23,9 @@ struct Video: Codable {
     let event: String
     let duration: String
 }
+
+struct VideoDetail {
+    let title: String
+    let description: String
+    let m3u8URL: URL
+}
