@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DownloadData" representedClassName="DownloadData" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="progress" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="url" optional="YES" attributeType="URI"/>
+        <relationship name="video" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Video"/>
+    </entity>
     <entity name="Video" representedClassName="Video" syncable="YES" codeGenerationType="class">
         <attribute name="des" optional="YES" attributeType="String"/>
         <attribute name="duration" optional="YES" attributeType="String"/>
@@ -11,6 +18,7 @@
         <attribute name="urlStr" optional="YES" attributeType="String"/>
     </entity>
     <elements>
+        <element name="DownloadData" positionX="-45" positionY="63" width="128" height="118"/>
         <element name="Video" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>
 </model>

@@ -45,7 +45,13 @@
                             <outlet property="delegate" destination="g9O-Zj-eCc" id="iPU-vI-cLE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="All Videos" id="3Mr-y2-Sbf"/>
+                    <navigationItem key="navigationItem" title="All Videos" leftItemsSupplementBackButton="YES" id="3Mr-y2-Sbf">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="arrow.down.circle" catalog="system" id="e7K-i0-2e2">
+                            <connections>
+                                <segue destination="uRh-Rw-pga" kind="presentation" identifier="ShowDownload" id="A9u-r6-0Pu"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="indicator" destination="WIU-t0-PsL" id="Ypk-Th-BbK"/>
                         <segue destination="yjK-n9-gyE" kind="show" identifier="ShowDetail" id="pN7-3X-g2x"/>
@@ -116,10 +122,54 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Overview" id="oLg-9N-BhY">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="npW-9X-mzz">
+                                        <rect key="frame" x="20" y="199.5" width="374" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="npW-9X-mzz" id="9Nl-eD-EoG">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HD Downlaod" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L4N-Yt-td5">
+                                                    <rect key="frame" x="134.5" y="11.5" width="105" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="L4N-Yt-td5" firstAttribute="centerY" secondItem="9Nl-eD-EoG" secondAttribute="centerY" id="9XN-Ob-rhe"/>
+                                                <constraint firstItem="L4N-Yt-td5" firstAttribute="centerX" secondItem="9Nl-eD-EoG" secondAttribute="centerX" id="eLA-Go-Qnv"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="44" id="zQu-oz-FCa">
+                                        <rect key="frame" x="20" y="243.5" width="374" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="zQu-oz-FCa" id="z74-Uy-hhW">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SD Download" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="68n-5x-jDU">
+                                                    <rect key="frame" x="135.5" y="11.5" width="103" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="68n-5x-jDU" firstAttribute="centerX" secondItem="z74-Uy-hhW" secondAttribute="centerX" id="9RG-vT-lJI"/>
+                                                <constraint firstItem="68n-5x-jDU" firstAttribute="centerY" secondItem="z74-Uy-hhW" secondAttribute="centerY" id="rIn-ef-cvE"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                             <tableViewSection headerTitle="Other" id="nVh-hY-Vk2">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="9yj-0o-UPA">
-                                        <rect key="frame" x="20" y="199.5" width="374" height="44"/>
+                                        <rect key="frame" x="20" y="343.5" width="374" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9yj-0o-UPA" id="Hbq-Yi-mH7">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="44"/>
@@ -182,5 +232,51 @@
             </objects>
             <point key="canvasLocation" x="978.26086956521749" y="235.71428571428569"/>
         </scene>
+        <!--Download List-->
+        <scene sceneID="pVa-KZ-WOs">
+            <objects>
+                <tableViewController id="dwD-LF-2AG" customClass="DownloadViewController" customModule="WWDCPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="lZO-yF-ZTb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <connections>
+                            <outlet property="dataSource" destination="dwD-LF-2AG" id="pRa-Mj-aN3"/>
+                            <outlet property="delegate" destination="dwD-LF-2AG" id="Bsz-oi-XKY"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Download List" leftItemsSupplementBackButton="YES" id="umN-0r-BLS">
+                        <barButtonItem key="leftBarButtonItem" title="关闭" id="c7m-Ot-miq">
+                            <connections>
+                                <action selector="close:" destination="dwD-LF-2AG" id="nmm-Pa-Kyj"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BCk-nq-sch" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1876.8115942028987" y="1009.8214285714286"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="I33-rR-NAq">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uRh-Rw-pga" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="hAu-bb-Loe">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="dwD-LF-2AG" kind="relationship" relationship="rootViewController" id="Fgw-4v-bKE"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dbg-V5-86Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="966.66666666666674" y="1009.8214285714286"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="arrow.down.circle" catalog="system" width="64" height="60"/>
+    </resources>
 </document>

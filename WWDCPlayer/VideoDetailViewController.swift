@@ -18,9 +18,14 @@ class VideoDetailViewController: UITableViewController {
     
     @Published var isLoading = false
     
+    var downloadVideo = PassthroughSubject<DownloadItem, Never>()
+    
     var video: Video!
+    var videoDetail: VideoDetail!
     let service = WWDCService()
     var subscriptions = Set<AnyCancellable>()
+    var downloadItems: [DownloadItem]!
+    var coreDataStack: CoreDataStack!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +63,7 @@ class VideoDetailViewController: UITableViewController {
             .sink(receiveCompletion: { [unowned self] completion in
                 // handle error
             }) { [unowned self] videoDetail in
+                self.videoDetail = videoDetail
                 self.isLoading = false
                 self.titleLabel.text = videoDetail.title
                 self.descriptionLabel.text = videoDetail.description
@@ -66,11 +72,25 @@ class VideoDetailViewController: UITableViewController {
             }
             .store(in: &subscriptions)
     }
+    
+    func hdDownload() {
+        download(videoDetail.hd)
+    }
+    
+    func sdDownload() {
+        download(videoDetail.sd)
+    }
+    
+    func download(_ url: URL) {
+        let downloadItem = DownloadItem(video: video, url: url, coreDataStack: coreDataStack)
+        downloadVideo.send(downloadItem)
+        downloadItem.resume()
+    }
 
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return isLoading ? 0 : 2
+        return isLoading ? 0 : 3
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -78,6 +98,10 @@ class VideoDetailViewController: UITableViewController {
         
         switch (indexPath.section, indexPath.row) {
         case (1, 0):
+            hdDownload()
+        case (1, 1):
+            sdDownload()
+        case (2, 0):
             print(videoURL.text ?? "NIL")
         default: 
             break

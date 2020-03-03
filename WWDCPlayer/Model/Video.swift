@@ -14,9 +14,12 @@ struct Group {
 }
 
 struct VideoDetail {
+    let id: String
     let title: String
     let description: String
     let m3u8URL: URL
+    let hd: URL
+    let sd: URL
 }
 
 enum Response {

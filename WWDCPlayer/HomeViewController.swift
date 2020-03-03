@@ -27,6 +27,7 @@ class HomeViewController: UITableViewController {
     var groups: [Group] = []
     var selectedVideo: Video?
     var subscription = Set<AnyCancellable>()
+    var downloadItems: [DownloadItem] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +65,20 @@ class HomeViewController: UITableViewController {
             .store(in: &subscriptions)
 
         fetchDataFromCoreData()
+        restoreDownloadList()
+    }
+    
+    func restoreDownloadList() {
+        let request: NSFetchRequest<DownloadData> = DownloadData.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
+        do {
+            let downloadDatas = try coreDataStack.context.fetch(request)
+            downloadItems = downloadDatas.map {
+                DownloadItem(video: $0.video!, url: $0.url!, coreDataStack: self.coreDataStack, downloadData: $0)
+            }
+        } catch {
+            print("Could fetch download data from core data: \(error)")
+        }
     }
     
     func convert(_ videos: [Video]) -> [Group] {
@@ -137,6 +152,31 @@ class HomeViewController: UITableViewController {
         coreDataStack.save()
         return datas
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetail", 
+            let vc = segue.destination as? VideoDetailViewController,
+            let video = selectedVideo {
+            vc.video = video
+            vc.downloadItems = downloadItems
+            vc.coreDataStack = coreDataStack
+            vc.downloadVideo    
+                .sink { [unowned self] in
+                    self.downloadItems.append($0)
+                }
+                .store(in: &vc.subscriptions)
+        } else if segue.identifier == "ShowDownload",
+            let nav = segue.destination as? UINavigationController,
+            let vc = nav.viewControllers.first as? DownloadViewController {
+            vc.downloadItems = downloadItems
+            
+            vc.removeDownloadItem
+                .sink { [unowned self] item in
+                    self.downloadItems.removeAll { $0 === item }
+                }
+                .store(in: &vc.subscriptions)
+        }
+    }
 
     // MARK: - Table view data source
 
@@ -162,14 +202,6 @@ class HomeViewController: UITableViewController {
         let video = group.videos[indexPath.row]
         cell.config(video)
         return cell
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowDetail", 
-            let vc = segue.destination as? VideoDetailViewController,
-            let video = selectedVideo {
-            vc.video = video
-        }
     }
     
     // MARK: - Table view delegate
