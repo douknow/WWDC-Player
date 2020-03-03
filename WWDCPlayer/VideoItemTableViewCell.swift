@@ -30,7 +30,7 @@ class VideoItemTableViewCell: UITableViewCell {
     func config(_ video: Video) {
         previewImageView.kf.setImage(with: video.previewImageURL)
         titleLabel.text = video.title
-        tagLabel.text = video.focus.joined(separator: ", ")
+        tagLabel.text = video.focus
     }
     
 }

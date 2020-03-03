@@ -22,21 +22,18 @@ class WWDCService {
     
     let allVideoURL = URL(string: "https://developer.apple.com/videos/all-videos/")!
     
-    func allVideos() -> AnyPublisher<[Group], Error> {
+    func allVideos() -> AnyPublisher<[Response.Video], Error> {
         URLSession.shared.dataTaskPublisher(for: allVideoURL)
             .map(\.data)
-            .tryMap { data -> [Group] in
+            .tryMap { data -> [Response.Video] in
                 guard let html = String(data: data, encoding: .utf8) else {
                     throw Error.error
                 } 
                 
-                var groupData: [Group] = []
                 let doc = try SwiftSoup.parse(html)
                 let groups = try doc.select("#main > section.all-content.padding-bottom > ul > li")
+                var videosData: [Response.Video] = []
                 for group in groups {
-                    var videosData: [Video] = []                    
-                    let title = try group.select("section > section > section > section > span > span").text()
-                    
                     let videos = try group.select("> ul > li")
                     for video in videos {
                         let imageAndDuration = try video.select("section.grid > section.row > section").first!
@@ -53,7 +50,7 @@ class WWDCService {
                             .split(separator: ",")
                             .map { String($0).trimmingCharacters(in: .whitespaces) }
                         let description = try infoSection.select("p.description").text()
-                        let data = Video(id: id, 
+                        let data = Response.Video(id: id, 
                                           relaveURLStr: url, 
                                           previewImageURL: imageURL, 
                                           title: title, 
@@ -63,11 +60,8 @@ class WWDCService {
                                           duration: duration)
                         videosData.append(data)
                     }
-                    
-                    let data = Group(title: title, videos: videosData)
-                    groupData.append(data)
                 }
-                return groupData
+                return videosData
             }
             .mapError({ _ in
                 Error.error
@@ -76,7 +70,7 @@ class WWDCService {
     }
     
     func videoDetail(by video: Video) -> AnyPublisher<VideoDetail, Error> {
-        let url = Endpoint.basic.appendingPathComponent(video.relaveURLStr)
+        let url = Endpoint.basic.appendingPathComponent(video.urlStr ?? "")
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .tryMap({ data -> VideoDetail in

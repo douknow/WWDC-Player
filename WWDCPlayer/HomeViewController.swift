@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import CoreData
 
 class HomeViewController: UITableViewController {
     
@@ -18,8 +19,10 @@ class HomeViewController: UITableViewController {
     @IBOutlet var indicator: UIActivityIndicatorView!
     
     @Published var isLoading = false
+    @Published var videos: [Video] = []
     
     let service = WWDCService()
+    var coreDataStack: CoreDataStack!
     var subscriptions = Set<AnyCancellable>()
     var groups: [Group] = []
     var selectedVideo: Video?
@@ -33,7 +36,21 @@ class HomeViewController: UITableViewController {
         let nib = UINib(nibName: "VideoItemTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: Identifier.videoCell)
         
+        $videos
+            .filter { !$0.isEmpty }
+            .map { [unowned self] videos -> [Group] in
+                self.convert(videos)
+            }
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] in
+                self.isLoading = false
+                self.groups = $0
+                self.tableView.reloadData()
+            }
+            .store(in: &subscriptions)
+        
         $isLoading
+            .removeDuplicates()
             .sink(receiveCompletion: { completion in
                 // handle error
             }) { [unowned self] isLoading in
@@ -46,7 +63,28 @@ class HomeViewController: UITableViewController {
             }
             .store(in: &subscriptions)
 
-        fetchData()
+        fetchDataFromCoreData()
+    }
+    
+    func convert(_ videos: [Video]) -> [Group] {
+        var groups: [Group] = []
+        for video in videos {
+            let event = video.event ?? "No Event"
+            if let index = groups.firstIndex(where: { $0.title == event }) {
+                groups[index] = Group(title: event, videos: groups[index].videos + [video])
+            } else {
+                let group = Group(title: event, videos: [video])
+                groups.append(group)
+            }
+        }
+        groups.sort {
+            if $0.title.contains("WWDC") && $1.title.contains("WWDC") {
+                return $0.title > $1.title
+            }
+            
+            return $0.title < $1.title 
+        }
+        return groups
     }
     
     func setupView() {
@@ -56,20 +94,48 @@ class HomeViewController: UITableViewController {
         }
     }
     
-    func fetchData() {
+    func fetchDataFromCoreData() {
+        let request: NSFetchRequest<Video> = Video.fetchRequest()
+        do {
+            videos = try coreDataStack.context.fetch(request)
+            if videos.isEmpty { fetchDataFromWeb() }
+        } catch {
+            print("Load data from coreData error: \(error)")
+        }
+    }
+    
+    func fetchDataFromWeb() {
         isLoading = true
         service.allVideos()
-            .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
                 // handle error
-            }) { [unowned self] groups in
-                print("group's count: \(groups.count)")
+            }) { [unowned self] videos in
+                print("🎉 Fetch \(videos.count) videos from wwdc web site.")
                 
-                self.groups = groups
-                self.tableView.reloadData()
-                self.isLoading = false
+                let videos = self.saveData(videos)
+                self.videos = videos
             }
             .store(in: &subscriptions)
+    }
+    
+    func saveData(_ videos: [Response.Video]) -> [Video] {
+        var datas: [Video] = []
+        
+        for video in videos {
+            let data = Video(context: coreDataStack.context)
+            data.id = video.id
+            data.title = video.title
+            data.des = video.description
+            data.duration = video.duration
+            data.event = video.event
+            data.focus = video.focus.joined(separator: ",")
+            data.previewImageURL = video.previewImageURL
+            data.urlStr = video.relaveURLStr
+            datas.append(data)
+        }
+        
+        coreDataStack.save()
+        return datas
     }
 
     // MARK: - Table view data source
@@ -80,7 +146,6 @@ class HomeViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return groups[section].videos.count
     }
     
@@ -119,60 +184,5 @@ class HomeViewController: UITableViewController {
         selectedVideo = video
         performSegue(withIdentifier: "ShowDetail", sender: nil)
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }
