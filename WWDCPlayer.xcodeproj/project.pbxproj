@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5C231FA4240CE53C001E25A6 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA3240CE53C001E25A6 /* SwiftSoup */; };
 		5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA6240CF33A001E25A6 /* Kingfisher */; };
 		5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FA8240D07E0001E25A6 /* HomeViewController.swift */; };
 		5C231FAB240D2C45001E25A6 /* VideoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */; };
@@ -21,7 +20,6 @@
 		5C231FBD240E48FD001E25A6 /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FBC240E48FD001E25A6 /* DownloadItem.swift */; };
 		5CD88D55240CDEAC00948ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D54240CDEAC00948ADC /* AppDelegate.swift */; };
 		5CD88D57240CDEAC00948ADC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */; };
-		5CD88D59240CDEAC00948ADC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D58240CDEAC00948ADC /* ViewController.swift */; };
 		5CD88D5C240CDEAC00948ADC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD88D5A240CDEAC00948ADC /* Main.storyboard */; };
 		5CD88D5E240CDEB200948ADC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5CD88D5D240CDEB200948ADC /* Assets.xcassets */; };
 		5CD88D61240CDEB200948ADC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5CD88D5F240CDEB200948ADC /* LaunchScreen.storyboard */; };
@@ -29,6 +27,11 @@
 		5CD88D6C240CDF4E00948ADC /* VideoItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5CD88D6A240CDF4E00948ADC /* VideoItemTableViewCell.xib */; };
 		5CD88D6F240CE13800948ADC /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D6E240CE13800948ADC /* Video.swift */; };
 		5CD88D72240CE23B00948ADC /* WWDCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D71240CE23B00948ADC /* WWDCService.swift */; };
+		5CEBE1212410C7960026C533 /* Pantomime in Frameworks */ = {isa = PBXBuildFile; productRef = 5CEBE1202410C7960026C533 /* Pantomime */; };
+		5CEBE1242410C8EA0026C533 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5CEBE1232410C8EA0026C533 /* SwiftSoup */; };
+		5CEBE1282410D89B0026C533 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBE1272410D89B0026C533 /* PlayerViewController.swift */; };
+		5CEBE12B241103340026C533 /* ContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBE12A241103340026C533 /* ContainerService.swift */; };
+		5CEBE12D2411036C0026C533 /* ShareStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBE12C2411036C0026C533 /* ShareStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,7 +47,6 @@
 		5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD88D54240CDEAC00948ADC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5CD88D58240CDEAC00948ADC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5CD88D5B240CDEAC00948ADC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5CD88D5D240CDEB200948ADC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5CD88D60240CDEB200948ADC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -54,6 +56,9 @@
 		5CD88D6A240CDF4E00948ADC /* VideoItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoItemTableViewCell.xib; sourceTree = "<group>"; };
 		5CD88D6E240CE13800948ADC /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		5CD88D71240CE23B00948ADC /* WWDCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCService.swift; sourceTree = "<group>"; };
+		5CEBE1272410D89B0026C533 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		5CEBE12A241103340026C533 /* ContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerService.swift; sourceTree = "<group>"; };
+		5CEBE12C2411036C0026C533 /* ShareStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,9 +66,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CEBE1212410C7960026C533 /* Pantomime in Frameworks */,
+				5CEBE1242410C8EA0026C533 /* SwiftSoup in Frameworks */,
 				5C231FAE240D3CEB001E25A6 /* SnapKit in Frameworks */,
 				5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */,
-				5C231FA4240CE53C001E25A6 /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,18 +95,15 @@
 		5CD88D53240CDEAC00948ADC /* WWDCPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				5CEBE1292410D8DD0026C533 /* ViewController */,
 				5CD88D70240CE22D00948ADC /* Service */,
 				5CD88D6D240CE12D00948ADC /* Model */,
 				5CD88D68240CDEBD00948ADC /* WWDCPlayer.entitlements */,
 				5CD88D54240CDEAC00948ADC /* AppDelegate.swift */,
 				5CD88D56240CDEAC00948ADC /* SceneDelegate.swift */,
-				5C231FA8240D07E0001E25A6 /* HomeViewController.swift */,
-				5C231FB6240E4644001E25A6 /* DownloadViewController.swift */,
 				5C231FB8240E4668001E25A6 /* DownloadItemCell.swift */,
 				5C231FBA240E467E001E25A6 /* DownloadItemCell.xib */,
-				5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */,
 				5C231FAF240D4A3B001E25A6 /* UIView+.swift */,
-				5CD88D58240CDEAC00948ADC /* ViewController.swift */,
 				5CD88D69240CDF4E00948ADC /* VideoItemTableViewCell.swift */,
 				5CD88D6A240CDF4E00948ADC /* VideoItemTableViewCell.xib */,
 				5CD88D5A240CDEAC00948ADC /* Main.storyboard */,
@@ -118,6 +121,7 @@
 			children = (
 				5CD88D6E240CE13800948ADC /* Video.swift */,
 				5C231FBC240E48FD001E25A6 /* DownloadItem.swift */,
+				5CEBE12C2411036C0026C533 /* ShareStore.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -126,8 +130,20 @@
 			isa = PBXGroup;
 			children = (
 				5CD88D71240CE23B00948ADC /* WWDCService.swift */,
+				5CEBE12A241103340026C533 /* ContainerService.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		5CEBE1292410D8DD0026C533 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5C231FA8240D07E0001E25A6 /* HomeViewController.swift */,
+				5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */,
+				5C231FB6240E4644001E25A6 /* DownloadViewController.swift */,
+				5CEBE1272410D89B0026C533 /* PlayerViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,9 +163,10 @@
 			);
 			name = WWDCPlayer;
 			packageProductDependencies = (
-				5C231FA3240CE53C001E25A6 /* SwiftSoup */,
 				5C231FA6240CF33A001E25A6 /* Kingfisher */,
 				5C231FAD240D3CEB001E25A6 /* SnapKit */,
+				5CEBE1202410C7960026C533 /* Pantomime */,
+				5CEBE1232410C8EA0026C533 /* SwiftSoup */,
 			);
 			productName = WWDCPlayer;
 			productReference = 5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */;
@@ -180,9 +197,10 @@
 			);
 			mainGroup = 5CD88D48240CDEAC00948ADC;
 			packageReferences = (
-				5C231FA2240CE53C001E25A6 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				5C231FA5240CF33A001E25A6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				5C231FAC240D3CEB001E25A6 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				5CEBE11F2410C7960026C533 /* XCRemoteSwiftPackageReference "Pantomime" */,
+				5CEBE1222410C8EA0026C533 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 5CD88D52240CDEAC00948ADC /* Products */;
 			projectDirPath = "";
@@ -214,15 +232,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CD88D6B240CDF4E00948ADC /* VideoItemTableViewCell.swift in Sources */,
-				5CD88D59240CDEAC00948ADC /* ViewController.swift in Sources */,
 				5CD88D72240CE23B00948ADC /* WWDCService.swift in Sources */,
 				5C231FAB240D2C45001E25A6 /* VideoDetailViewController.swift in Sources */,
+				5CEBE1282410D89B0026C533 /* PlayerViewController.swift in Sources */,
+				5CEBE12B241103340026C533 /* ContainerService.swift in Sources */,
 				5C231FB3240E2EEB001E25A6 /* Main.xcdatamodeld in Sources */,
 				5CD88D55240CDEAC00948ADC /* AppDelegate.swift in Sources */,
 				5C231FB5240E323A001E25A6 /* CoreDataStack.swift in Sources */,
 				5CD88D57240CDEAC00948ADC /* SceneDelegate.swift in Sources */,
 				5C231FB0240D4A3B001E25A6 /* UIView+.swift in Sources */,
 				5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */,
+				5CEBE12D2411036C0026C533 /* ShareStore.swift in Sources */,
 				5C231FB9240E4668001E25A6 /* DownloadItemCell.swift in Sources */,
 				5C231FB7240E4644001E25A6 /* DownloadViewController.swift in Sources */,
 				5C231FBD240E48FD001E25A6 /* DownloadItem.swift in Sources */,
@@ -432,14 +452,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		5C231FA2240CE53C001E25A6 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:scinfu/SwiftSoup.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.3.0;
-			};
-		};
 		5C231FA5240CF33A001E25A6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
@@ -456,14 +468,25 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		5CEBE11F2410C7960026C533 /* XCRemoteSwiftPackageReference "Pantomime" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:douknow/Pantomime.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		5CEBE1222410C8EA0026C533 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		5C231FA3240CE53C001E25A6 /* SwiftSoup */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5C231FA2240CE53C001E25A6 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
-			productName = SwiftSoup;
-		};
 		5C231FA6240CF33A001E25A6 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 5C231FA5240CF33A001E25A6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
@@ -473,6 +496,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5C231FAC240D3CEB001E25A6 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		5CEBE1202410C7960026C533 /* Pantomime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CEBE11F2410C7960026C533 /* XCRemoteSwiftPackageReference "Pantomime" */;
+			productName = Pantomime;
+		};
+		5CEBE1232410C8EA0026C533 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5CEBE1222410C8EA0026C533 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
 		};
 /* End XCSwiftPackageProductDependency section */
 

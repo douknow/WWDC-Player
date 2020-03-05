@@ -11,9 +11,8 @@ import Combine
 
 class DownloadViewController: UITableViewController {
     
-    var downloadItems: [DownloadItem]!
-    
-    let removeDownloadItem = PassthroughSubject<DownloadItem, Never>()
+    var downloadItems: [DownloadItem] = []
+    var shareStore = ContainerService.shared.shareStore
     
     var subscriptions = Set<AnyCancellable>()
 
@@ -22,6 +21,13 @@ class DownloadViewController: UITableViewController {
         
         let nib = UINib(nibName: "DownloadItemCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: DownloadItemCell.identifier)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        downloadItems = shareStore.allDownloadItems
+        tableView.reloadData()
     }
     
     @IBAction func close(_ sender: Any?) {
@@ -67,7 +73,7 @@ class DownloadViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = downloadItems.remove(at: indexPath.row)
-            removeDownloadItem.send(item)
+            shareStore.remove(downloadItem: item)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             item.remove()
         }

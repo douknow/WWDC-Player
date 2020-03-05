@@ -96,15 +96,14 @@ class DownloadItem: NSObject {
     }
     
     func createFileLocation(_ id: UUID) -> URL {
-        guard let url = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first else {
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             fatalError("Could not find the download directory")
         }
         
         let videoURL = url.appendingPathComponent("videos")
         try? FileManager.default.createDirectory(at: videoURL, withIntermediateDirectories: true, attributes: [:])
-        
-        return videoURL
-            .appendingPathComponent(id.uuidString)
+        let destination = videoURL.appendingPathComponent(id.uuidString)
+        return destination
     }
     
     func deleteCacheIfNeed() {
@@ -119,6 +118,10 @@ class DownloadItem: NSObject {
         }
     }
     
+    func deleteFileIfNeed() {
+        try? fileManager.removeItem(at: fileLocation)
+    }
+    
     func tryResotreResumeData() {
         try? resumeData = Data(contentsOf: resumeLocation)
     }
@@ -130,8 +133,7 @@ class DownloadItem: NSObject {
     
     func moveToVideoLocation(from location: URL) {
         do {
-            try fileManager.copyItem(at: location, to: fileLocation)
-            try fileManager.removeItem(at: location)
+            try fileManager.moveItem(at: location, to: fileLocation)
         } catch {
             print("Could not move file to video download directory: \(error)")
         }
@@ -139,6 +141,7 @@ class DownloadItem: NSObject {
     
     func remove() {
         deleteCacheIfNeed()
+        deleteFileIfNeed()
         coreDataStack.context.delete(downloadData)
         coreDataStack.save()
     }
@@ -183,7 +186,6 @@ extension DownloadItem: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         let percent = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
         downloadProgress = percent
-        print("download progress: \(percent)")
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {

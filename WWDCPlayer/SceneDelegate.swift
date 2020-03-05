@@ -11,7 +11,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    let coreDataStack = CoreDataStack()
+    let coreDataStack = ContainerService.shared.coreDataStack
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -20,8 +20,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        guard let rootViewController = window?.rootViewController as? UINavigationController,
-              let homeViewController = rootViewController.viewControllers.first as? HomeViewController else {
+        guard let tabController = window?.rootViewController as? UITabBarController,
+            let homeNav = tabController.viewControllers?.first as? UINavigationController,
+            let homeViewController = homeNav.viewControllers.first as? HomeViewController,
+            let downloadNav = tabController.viewControllers?.last as? UINavigationController,
+            let downloadViewController = downloadNav.viewControllers.first as? DownloadViewController else {
             fatalError()
         }
         

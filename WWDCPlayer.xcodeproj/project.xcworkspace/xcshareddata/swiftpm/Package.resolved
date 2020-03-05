@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "Pantomime",
+        "repositoryURL": "git@github.com:douknow/Pantomime.git",
+        "state": {
+          "branch": "master",
+          "revision": "e8369493cc37f47f7fc075c3eb156a1b5adbc13d",
+          "version": null
+        }
+      },
+      {
         "package": "SnapKit",
         "repositoryURL": "https://github.com/SnapKit/SnapKit",
         "state": {

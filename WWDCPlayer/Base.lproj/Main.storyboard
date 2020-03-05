@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="DS6-Nr-4kR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Dsf-lN-aPy">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -29,13 +30,7 @@
                             <outlet property="delegate" destination="g9O-Zj-eCc" id="iPU-vI-cLE"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="All Videos" leftItemsSupplementBackButton="YES" id="3Mr-y2-Sbf">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="arrow.down.circle" catalog="system" id="e7K-i0-2e2">
-                            <connections>
-                                <segue destination="uRh-Rw-pga" kind="presentation" identifier="ShowDownload" id="A9u-r6-0Pu"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="All Videos" leftItemsSupplementBackButton="YES" id="3Mr-y2-Sbf"/>
                     <connections>
                         <outlet property="indicator" destination="WIU-t0-PsL" id="Ypk-Th-BbK"/>
                         <segue destination="yjK-n9-gyE" kind="show" identifier="ShowDetail" id="pN7-3X-g2x"/>
@@ -47,7 +42,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
             </objects>
-            <point key="canvasLocation" x="2420" y="297"/>
+            <point key="canvasLocation" x="2809" y="236"/>
         </scene>
         <!--Talk-->
         <scene sceneID="pW5-4q-qec">
@@ -185,7 +180,9 @@
                     <navigationItem key="navigationItem" title="Talk" largeTitleDisplayMode="never" id="SD6-OY-xSC"/>
                     <connections>
                         <outlet property="descriptionLabel" destination="DpI-sc-REd" id="u3o-0F-Gvm"/>
+                        <outlet property="hdDownloadLabel" destination="L4N-Yt-td5" id="lve-xu-VVi"/>
                         <outlet property="indicator" destination="HF9-ne-5Tw" id="WX6-Jd-0BI"/>
+                        <outlet property="sdDownloadLabel" destination="68n-5x-jDU" id="cAZ-dV-dt6"/>
                         <outlet property="titleLabel" destination="7Mk-TM-FuX" id="gDK-H2-9s8"/>
                         <outlet property="videoURL" destination="xtG-Et-GTw" id="vqT-at-1P4"/>
                     </connections>
@@ -196,12 +193,13 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </activityIndicatorView>
             </objects>
-            <point key="canvasLocation" x="3726.0869565217395" y="342.85714285714283"/>
+            <point key="canvasLocation" x="3725" y="236"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Item-->
         <scene sceneID="FcX-ft-s0B">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DS6-Nr-4kR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" image="text.alignleft" catalog="system" id="oJ5-rR-ccJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="zhq-K0-SbS">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -214,14 +212,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6o4-2a-hrh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="978.26086956521749" y="235.71428571428569"/>
+            <point key="canvasLocation" x="1888.4057971014495" y="235.71428571428569"/>
         </scene>
         <!--Download List-->
         <scene sceneID="pVa-KZ-WOs">
             <objects>
                 <tableViewController id="dwD-LF-2AG" customClass="DownloadViewController" customModule="WWDCPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="lZO-yF-ZTb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <connections>
@@ -229,25 +227,68 @@
                             <outlet property="delegate" destination="dwD-LF-2AG" id="Bsz-oi-XKY"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Download List" leftItemsSupplementBackButton="YES" id="umN-0r-BLS">
-                        <barButtonItem key="leftBarButtonItem" title="关闭" id="c7m-Ot-miq">
-                            <connections>
-                                <action selector="close:" destination="dwD-LF-2AG" id="nmm-Pa-Kyj"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Download List" leftItemsSupplementBackButton="YES" id="umN-0r-BLS"/>
+                    <connections>
+                        <segue destination="bUi-pl-ws9" kind="show" id="l6S-nx-J06"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BCk-nq-sch" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1876.8115942028987" y="1009.8214285714286"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--View Controller-->
+        <scene sceneID="niU-7k-dQV">
+            <objects>
+                <viewController id="bUi-pl-ws9" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jIA-pK-jBu">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="9O5-iD-DXQ"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Xqw-km-Zad"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9h3-eX-4Rd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2810" y="1010"/>
+        </scene>
+        <!--Player View Controller-->
+        <scene sceneID="tOF-NZ-4pu">
+            <objects>
+                <viewController id="cSJ-hi-Egb" customClass="PlayerViewController" customModule="WWDCPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bu5-KF-gvV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TTv-iL-93a">
+                                <rect key="frame" x="185" y="426" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="0IQ-sc-Edc"/>
+                                    <constraint firstAttribute="height" constant="44" id="jkU-kf-tOx"/>
+                                </constraints>
+                                <state key="normal" image="play.fill" catalog="system"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="TTv-iL-93a" firstAttribute="centerX" secondItem="bu5-KF-gvV" secondAttribute="centerX" id="Rud-F5-211"/>
+                            <constraint firstItem="TTv-iL-93a" firstAttribute="centerY" secondItem="bu5-KF-gvV" secondAttribute="centerY" id="vsr-e9-C7o"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QQh-V9-uXM"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OMS-sT-iNX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3726" y="1010"/>
+        </scene>
+        <!--Item-->
         <scene sceneID="I33-rR-NAq">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="uRh-Rw-pga" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" image="tray.and.arrow.down" catalog="system" id="ibx-Kr-FId"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="hAu-bb-Loe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -257,10 +298,30 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dbg-V5-86Q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="966.66666666666674" y="1009.8214285714286"/>
+            <point key="canvasLocation" x="738" y="1010"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="cst-BZ-qAY">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Dsf-lN-aPy" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9an-qG-UB4">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="DS6-Nr-4kR" kind="relationship" relationship="viewControllers" id="FpF-27-zDY"/>
+                        <segue destination="uRh-Rw-pga" kind="relationship" relationship="viewControllers" id="3q2-fn-9qs"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sdu-EG-UOc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="739" y="223"/>
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.down.circle" catalog="system" width="64" height="60"/>
+        <image name="play.fill" catalog="system" width="58" height="64"/>
+        <image name="text.alignleft" catalog="system" width="64" height="50"/>
+        <image name="tray.and.arrow.down" catalog="system" width="64" height="54"/>
     </resources>
 </document>

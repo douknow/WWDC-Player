@@ -20,4 +20,9 @@ extension UIView {
         view.snp.makeConstraints(closure)
     }
     
+    func insertSubview(_ view: UIView, at: Int, closure: ((ConstraintMaker) -> Void) = { _ in }) {
+        insertSubview(view, at: at)
+        view.snp.makeConstraints(closure)
+    } 
+    
 }
