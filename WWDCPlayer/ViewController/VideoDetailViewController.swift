@@ -8,6 +8,7 @@
 
 import UIKit
 import Combine
+import AVKit
 
 class VideoDetailViewController: UITableViewController {
     
@@ -22,18 +23,38 @@ class VideoDetailViewController: UITableViewController {
     
     var video: Video!
     var videoDetail: VideoDetail!
+    var didLoadvideoDetail = PassthroughSubject<VideoDetail, Never>()
     let service = WWDCService()
     let shareStore = ContainerService.shared.shareStore
-    var coreDataStack: CoreDataStack!
-    var playerViewController: PlayerViewController!
-    let playerViewAspect: CGFloat = 459.0/817
+    var coreDataStack = ContainerService.shared.coreDataStack
     var hdDownloadItem: DownloadItem?
     var sdDownloadItem: DownloadItem?
     var subscriptions = Set<AnyCancellable>()
     var downloadItemSubscriptions = Set<AnyCancellable>()
 
+    enum Identifier {
+        static let name = "name"
+        static let header = "header"
+        static let relatedVideo = "related-video"
+        static let title = "title"
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        guard video != nil else {
+            isLoading = true
+            return
+        }
+
+        tableView.separatorStyle = .none
+
+        tableView.register(AutolayoutTextTableViewCell.self, forCellReuseIdentifier: Identifier.title)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier.name)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier.relatedVideo)
+        tableView.register(HomeTableHeaderView.self, forHeaderFooterViewReuseIdentifier: Identifier.header)
+        tableView.register(AutolayoutTextTableViewCell.self, forCellReuseIdentifier: AutolayoutTextTableViewCell.identifier)
+        tableView.register(RelateVideoTableViewCell.self, forCellReuseIdentifier: RelateVideoTableViewCell.identifier)
         
         setupView()
         
@@ -54,20 +75,11 @@ class VideoDetailViewController: UITableViewController {
     }
     
     func setupView() {
-        additionalSafeAreaInsets = UIEdgeInsets(top: view.frame.width * playerViewAspect, left: 0, bottom: 0, right: 0)
         tableView.showsVerticalScrollIndicator = false
         
         view.addSubview(indicator) {
             $0.centerX.equalToSuperview()
             $0.centerY.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).multipliedBy(0.5)
-        }
-        
-        playerViewController = PlayerViewController()        
-        view.addSubview(playerViewController.view) {
-            $0.left.equalToSuperview()
-            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            $0.width.equalToSuperview()
-            $0.height.equalTo(self.playerViewController.view.snp.width).multipliedBy(playerViewAspect)
         }
     }
     
@@ -80,11 +92,9 @@ class VideoDetailViewController: UITableViewController {
                 // handle error
             }) { [unowned self] videoDetail in
                 self.videoDetail = videoDetail
+                self.didLoadvideoDetail.send(videoDetail)
                 self.setupDownloadItem()
                 self.isLoading = false
-                self.titleLabel.text = videoDetail.title
-                self.descriptionLabel.text = videoDetail.description
-                self.videoURL.text = videoDetail.m3u8URL.absoluteString
                 self.tableView.reloadData()
             }
             .store(in: &subscriptions)
@@ -143,29 +153,117 @@ class VideoDetailViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return isLoading ? 0 : 3
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch (indexPath.section, indexPath.row) {
-        case (1, 0):
-            guard hdDownloadItem == nil else { return }
-            hdDownload()
-        case (1, 1):
-            guard sdDownloadItem == nil else { return }
-            sdDownload()
-        case (2, 0):
-            print(videoURL.text ?? "NIL")
-        default: 
-            break
+        case (0, _):
+            return UITableView.automaticDimension
+        case (3..., _):
+            return 44
+        default:
+            return super.tableView(tableView, heightForRowAt: indexPath)
         }
     }
     
-    @IBAction func resumeButtonTappedHandler(_ sender: Any?) {
-        playerViewController.player?.play()
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return isLoading ? 0 : (videoDetail.relatedVideos.count + 3)
     }
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return 2
+        case 1:
+            return 2
+        case 2:
+            return 1
+        default:
+            let index = section - 3
+            return videoDetail.relatedVideos[index].videos.count
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath.section, indexPath.row) {
+        case (0, 0):
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.title, for: indexPath) as! AutolayoutTextTableViewCell
+            cell.label.font = UIFont.preferredFont(forTextStyle: .title1)
+            cell.backgroundColor = .clear
+            cell.selectionStyle = .none
+            cell.label.text = videoDetail.title
+            return cell
+        case (0, 1):
+            let cell = tableView.dequeueReusableCell(withIdentifier: AutolayoutTextTableViewCell.identifier, for: indexPath) as! AutolayoutTextTableViewCell
+            cell.label.text = videoDetail.description
+            cell.label.textColor = .secondaryLabel
+            cell.selectionStyle = .none
+            cell.backgroundColor = .clear
+            return cell
+        case (1, 0):
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
+            cell.textLabel?.text = "HD Download"
+            return cell
+        case (1, 1):
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
+            cell.textLabel?.text = "SD Download"
+            return cell
+        case (2, 0):
+            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
+            cell.textLabel?.text = "m3u8"
+            return cell
+        default:
+            let index = indexPath.section - 3
+            let cell = tableView.dequeueReusableCell(withIdentifier: RelateVideoTableViewCell.identifier, for: indexPath) as! RelateVideoTableViewCell
+            let video = videoDetail.relatedVideos[index].videos[indexPath.row]
+            cell.label.text = video.name
+            cell.backgroundColor = .clear
+            return cell
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard section >= 3 else { return nil }
+
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: Identifier.header) as? HomeTableHeaderView else {
+            fatalError()
+        }
+
+        let index = section - 3
+        let name = videoDetail.relatedVideos[index].name
+        if section == 3 {
+            view.label.text = "Related Videos\n\(name)"
+        } else {
+            view.label.text = name
+        }
+
+        return view
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 3 {
+            return 88
+        } else if section > 3 {
+            return 44
+        } else {
+            return 0
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+//        switch (indexPath.section, indexPath.row) {
+//        case (1, 0):
+//            guard hdDownloadItem == nil else { return }
+//            hdDownload()
+//        case (1, 1):
+//            guard sdDownloadItem == nil else { return }
+//            sdDownload()
+//        case (2, 0):
+//            print(videoURL.text ?? "NIL")
+//        default:
+//            break
+//        }
+    }
+    
 }

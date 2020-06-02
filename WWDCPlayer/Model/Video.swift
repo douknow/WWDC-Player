@@ -20,6 +20,17 @@ struct VideoDetail {
     let m3u8URL: URL
     let hd: URL
     let sd: URL
+    let relatedVideos: [ShortVideoGroup]
+}
+
+struct ShortVideoGroup {
+    let name: String
+    let videos: [ShortVideo]
+}
+
+struct ShortVideo {
+    let name: String
+    let relatedLink: String
 }
 
 enum Response {

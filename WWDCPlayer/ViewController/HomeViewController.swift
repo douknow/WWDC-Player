@@ -33,8 +33,8 @@ class HomeViewController: UITableViewController {
         
         setupView()
         
-        let nib = UINib(nibName: "VideoItemTableViewCell", bundle: nil)
-        tableView.register(nib, forCellReuseIdentifier: Identifier.videoCell)
+        navigationController?.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier.videoCell)
         
         $videos
             .filter { !$0.isEmpty }
@@ -139,51 +139,50 @@ class HomeViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ShowDetail", 
-            let vc = segue.destination as? VideoDetailViewController,
-            let video = selectedVideo {
-            vc.video = video
-            vc.coreDataStack = coreDataStack
-        }
+//        if segue.identifier == "ShowDetail",
+//
+//        }
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return groups.count
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups[section].videos.count
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return groups[section].title
+        return groups.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.videoCell, for: indexPath) as? VideoItemTableViewCell else {
-            fatalError()
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.videoCell, for: indexPath)
         
-        let group = groups[indexPath.section]
-        let video = group.videos[indexPath.row]
-        cell.config(video)
+        cell.textLabel?.text = groups[indexPath.item].title
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     // MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70
+        return 44
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let video = groups[indexPath.section].videos[indexPath.row]
-        selectedVideo = video
-        performSegue(withIdentifier: "ShowDetail", sender: nil)
+        let group = groups[indexPath.item]
+        let vc = AllVideoTableViewController()
+        vc.group = group
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+}
+
+extension HomeViewController: UINavigationControllerDelegate {
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        navigationController.interactivePopGestureRecognizer?.isEnabled = viewController !== self
     }
     
 }

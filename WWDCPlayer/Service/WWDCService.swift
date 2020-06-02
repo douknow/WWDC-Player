@@ -90,8 +90,24 @@ class WWDCService {
                 let otherInfo = try infomation.select(" > ul.links.small")
                 let hdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").first()!.attr("href")
                 let sdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").last()!.attr("href")
+
+                let hFours = try infomation.select("h4")
+                var relatedVideo: [ShortVideoGroup] = []
+                for h in hFours {
+                    let links = try h.nextElementSibling()!.select("li > a")
+                    let name = try h.text()
+                    var shortVideos: [ShortVideo] = []
+                    for link in links {
+                        let href = try link.attr("href")
+                        let name = try link.text()
+                        let shortVideo = ShortVideo(name: name, relatedLink: href)
+                        shortVideos.append(shortVideo)
+                    }
+                    let videoGroup = ShortVideoGroup(name: name, videos: shortVideos)
+                    relatedVideo.append(videoGroup)
+                }
                 
-                let videoDetail = VideoDetail(id: video.id!,title: title, description: description, m3u8URL: m3u8URL, hd: URL(string: hdDownloadURL)!, sd: URL(string: sdDownloadURL)!)
+                let videoDetail = VideoDetail(id: video.id!,title: title, description: description, m3u8URL: m3u8URL, hd: URL(string: hdDownloadURL)!, sd: URL(string: sdDownloadURL)!, relatedVideos: relatedVideo)
                 return videoDetail
             })
             .mapError { _ in 

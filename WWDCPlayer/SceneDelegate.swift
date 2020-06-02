@@ -20,15 +20,23 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
         
-        guard let tabController = window?.rootViewController as? UITabBarController,
-            let homeNav = tabController.viewControllers?.first as? UINavigationController,
-            let homeViewController = homeNav.viewControllers.first as? HomeViewController,
-            let downloadNav = tabController.viewControllers?.last as? UINavigationController,
-            let downloadViewController = downloadNav.viewControllers.first as? DownloadViewController else {
+        guard let splitVC = window?.rootViewController as? UISplitViewController
+//            let homeNav = tabController.viewControllers?.first as? UINavigationController,
+//            let homeViewController = homeNav.viewControllers.first as? HomeViewController,
+//            let downloadNav = tabController.viewControllers?.last as? UINavigationController,
+//            let downloadViewController = downloadNav.viewControllers.first as? DownloadViewController
+            else {
             fatalError()
         }
-        
-        homeViewController.coreDataStack = coreDataStack
+
+        splitVC.preferredDisplayMode = .allVisible
+
+        if let nav = splitVC.viewControllers.first as? UINavigationController,
+            let categoriesVC = nav.topViewController as? CategoryViewController {
+            categoriesVC.coreDataStack = coreDataStack
+        }
+//
+//        homeViewController.coreDataStack = coreDataStack
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
