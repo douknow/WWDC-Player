@@ -39,6 +39,11 @@ class VideoDetailViewController: UITableViewController {
         static let title = "title"
     }
 
+    var likedImage: UIImage? {
+        let name = video.isLiked ? "heart.fill" : "heart"
+        return UIImage(systemName: name)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -55,6 +60,7 @@ class VideoDetailViewController: UITableViewController {
         tableView.register(HomeTableHeaderView.self, forHeaderFooterViewReuseIdentifier: Identifier.header)
         tableView.register(AutolayoutTextTableViewCell.self, forCellReuseIdentifier: AutolayoutTextTableViewCell.identifier)
         tableView.register(RelateVideoTableViewCell.self, forCellReuseIdentifier: RelateVideoTableViewCell.identifier)
+        tableView.register(IconsTableViewCell.self, forCellReuseIdentifier: IconsTableViewCell.identifier)
         
         setupView()
         
@@ -174,7 +180,7 @@ class VideoDetailViewController: UITableViewController {
         case 0:
             return 2
         case 1:
-            return 2
+            return 1
         case 2:
             return 1
         default:
@@ -200,12 +206,11 @@ class VideoDetailViewController: UITableViewController {
             cell.backgroundColor = .clear
             return cell
         case (1, 0):
-            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
-            cell.textLabel?.text = "HD Download"
-            return cell
-        case (1, 1):
-            let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
-            cell.textLabel?.text = "SD Download"
+            let cell = tableView.dequeueReusableCell(withIdentifier: IconsTableViewCell.identifier, for: indexPath) as! IconsTableViewCell
+            cell.icons = [UIImage(systemName: "square.and.arrow.down"), likedImage]
+            cell.selectionStyle = .none
+            cell.backgroundColor = .clear
+            cell.delegate = self
             return cell
         case (2, 0):
             let cell = tableView.dequeueReusableCell(withIdentifier: Identifier.name, for: indexPath)
@@ -266,4 +271,44 @@ class VideoDetailViewController: UITableViewController {
 //        }
     }
     
+}
+
+extension VideoDetailViewController: IconsTableViewCellDelegate {
+
+    func iconsTableViewCell(_ iconsTableViewCell: IconsTableViewCell, didSelectedAt index: Int, source view: UIView) {
+        switch index {
+        case 0:
+            downloadHandler(view)
+        case 1:
+            likeHandler(view as! UIButton)
+        default:
+            break
+        }
+    }
+
+    func downloadHandler(_ sender: UIView) {
+        let menu = UIAlertController(title: "下载", message: "选择下载的清晰度", preferredStyle: .actionSheet)
+        let sdAction = UIAlertAction(title: "SD", style: .default) { _ in
+            print("download sd video")
+        }
+        let hdAction = UIAlertAction(title: "HD", style: .default) { _ in
+            print("download hd video")
+        }
+        menu.addAction(sdAction)
+        menu.addAction(hdAction)
+        menu.popoverPresentationController?.sourceView = sender
+        present(menu, animated: true, completion: nil)
+    }
+
+    func likeHandler(_ sender: UIButton) {
+        if video.isLiked {
+            video.liked = 0
+        } else {
+            video.liked = 1
+        }
+
+        coreDataStack.save()
+        sender.setImage(likedImage, for: .normal)
+    }
+
 }

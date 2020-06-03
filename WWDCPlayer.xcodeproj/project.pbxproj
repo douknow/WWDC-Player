@@ -12,6 +12,7 @@
 		5C1E5C1324866736000CE9DF /* RelateVideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C1224866736000CE9DF /* RelateVideoTableViewCell.swift */; };
 		5C1E5C152487B156000CE9DF /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C142487B156000CE9DF /* VideoView.swift */; };
 		5C1E5C172487B45C000CE9DF /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C162487B45C000CE9DF /* PlayerView.swift */; };
+		5C1E5C192487D897000CE9DF /* IconsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C182487D897000CE9DF /* IconsTableViewCell.swift */; };
 		5C2200982484D172004BF8E1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2200972484D172004BF8E1 /* main.swift */; };
 		5C22009E2484D553004BF8E1 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5C22009D2484D553004BF8E1 /* SwiftSoup */; };
 		5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA6240CF33A001E25A6 /* Kingfisher */; };
@@ -63,6 +64,7 @@
 		5C1E5C1224866736000CE9DF /* RelateVideoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelateVideoTableViewCell.swift; sourceTree = "<group>"; };
 		5C1E5C142487B156000CE9DF /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		5C1E5C162487B45C000CE9DF /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		5C1E5C182487D897000CE9DF /* IconsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsTableViewCell.swift; sourceTree = "<group>"; };
 		5C2200952484D172004BF8E1 /* DataDownloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DataDownloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2200972484D172004BF8E1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5C231FA8240D07E0001E25A6 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				5C1E5C102485676D000CE9DF /* AutolayoutTextTableViewCell.swift */,
 				5C1E5C1224866736000CE9DF /* RelateVideoTableViewCell.swift */,
 				5C1E5C142487B156000CE9DF /* VideoView.swift */,
+				5C1E5C182487D897000CE9DF /* IconsTableViewCell.swift */,
 				5C1E5C162487B45C000CE9DF /* PlayerView.swift */,
 			);
 			path = Views;
@@ -358,6 +361,7 @@
 				5C231FB0240D4A3B001E25A6 /* UIView+.swift in Sources */,
 				5C4A0F74248501670026AAF6 /* AllVideoTableViewController.swift in Sources */,
 				5C1E5C1324866736000CE9DF /* RelateVideoTableViewCell.swift in Sources */,
+				5C1E5C192487D897000CE9DF /* IconsTableViewCell.swift in Sources */,
 				5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */,
 				5CEBE12D2411036C0026C533 /* ShareStore.swift in Sources */,
 				5C231FB9240E4668001E25A6 /* DownloadItemCell.swift in Sources */,

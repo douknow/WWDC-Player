@@ -47,3 +47,9 @@ enum Response {
     }
     
 }
+
+extension Video {
+    var isLiked: Bool {
+        return liked == 1
+    }
+}

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class CategoryViewController: UITableViewController {
 
@@ -20,16 +21,18 @@ class CategoryViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.item {
-        case 0:
+        switch (indexPath.section, indexPath.item) {
+        case (0, 0):
             // show collection
             showCollection()
-        case 1:
+        case (0, 1):
             // show topic
             showTopic()
-        case 2:
+        case (0, 2):
             // show all video
             showAllVideo()
+        case (1, 0):
+            showLikedVideo()
         default:
             break
         }
@@ -46,6 +49,21 @@ class CategoryViewController: UITableViewController {
     func showAllVideo() {
         let vc = storyboard!.instantiateViewController(identifier: "AllVideo") as! HomeViewController
         vc.coreDataStack = coreDataStack
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    func showLikedVideo() {
+        var videos: [Video] = []
+        let request: NSFetchRequest<Video> = Video.fetchRequest()
+        request.predicate = NSPredicate(format: "%K=%@", argumentArray: [#keyPath(Video.liked), 1])
+        request.sortDescriptors = [NSSortDescriptor(key: #keyPath(Video.likeDate), ascending: false)]
+        do {
+            videos = try coreDataStack.context.fetch(request)
+        } catch {
+            print(error.localizedDescription)
+        }
+        let vc = AllVideoTableViewController()
+        vc.group = Group(title: "Liked", videos: videos)
         navigationController?.pushViewController(vc, animated: true)
     }
 
