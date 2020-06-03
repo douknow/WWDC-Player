@@ -19,6 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
+
+        setupToolBar(scene)
         
         guard let splitVC = window?.rootViewController as? UISplitViewController
 //            let homeNav = tabController.viewControllers?.first as? UINavigationController,
@@ -67,6 +69,57 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
+    func setupToolBar(_ scene: UIScene) {
+        #if targetEnvironment(macCatalyst)
+        if let scene = scene as? UIWindowScene,
+            let titleBar = scene.titlebar {
+
+            titleBar.titleVisibility = .hidden
+
+            let toolBar = NSToolbar(identifier: "toolbar")
+            titleBar.toolbar = toolBar
+            toolBar.delegate = self
+            toolBar.allowsUserCustomization = false
+            toolBar.displayMode = .iconOnly
+        }
+        #endif
+    }
+
+}
+
+extension NSToolbarItem.Identifier {
+    static let openInWeb = NSToolbarItem.Identifier("open-in-web")
+}
+
+extension SceneDelegate: NSToolbarDelegate {
+
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.openInWeb]
+    }
+
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        return [.flexibleSpace, .openInWeb]
+    }
+
+    func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+        var item: NSToolbarItem? = nil
+        let barButtonItem = UIBarButtonItem(image: UIImage(systemName: "safari"), style: .plain, target: self, action: #selector(openInWeb))
+        item = NSToolbarItem(itemIdentifier: itemIdentifier, barButtonItem: barButtonItem)
+        item?.toolTip = "Open in web"
+        item?.label = "Open in web"
+        item?.target = self
+        item?.action = #selector(openInWeb)
+        return item
+    }
+
+    @objc func openInWeb() {
+        let splitVC = (window?.rootViewController as! UISplitViewController)
+        let detailVC = splitVC.viewControllers.last as! VideoDetailContainerViewController
+        if let relatedURL = detailVC.video?.urlStr {
+            let url = WWDCService.Endpoint.basic.appendingPathComponent(relatedURL)
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
 
 }
 

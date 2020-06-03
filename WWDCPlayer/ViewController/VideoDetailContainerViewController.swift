@@ -14,7 +14,7 @@ import SnapKit
 class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var infoViewController: VideoDetailViewController!
-    var playerViewController: AVPlayerViewController!
+    var playerView: PlayerView!
     var avPlayer: AVPlayer!
     var video: Video!
     let playerViewAspect: CGFloat = 459.0/817
@@ -59,15 +59,13 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     
     func setupViews() {        
         navigationController?.navigationBar.isTranslucent = true
-        
-        playerViewController = AVPlayerViewController()
-        playerViewController.willMove(toParent: self)
-        view.addSubview(playerViewController.view) {
+
+        playerView = PlayerView()
+        view.addSubview(playerView) {
             $0.left.right.equalToSuperview()
             $0.top.equalToSuperview().offset(UIApplication.shared.statusBarFrame.height)
             $0.height.equalTo(self.view.snp.width).multipliedBy(self.playerViewAspect)
         }
-        playerViewController.didMove(toParent: self)
 
         infoViewController.willMove(toParent: self)
         view.addSubview(infoViewController.view) {
@@ -79,9 +77,8 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     }
     
     func setupPlayer() {
-        avPlayer = AVPlayer(url: videoDetail.m3u8URL)
-        playerViewController.player = avPlayer
-        avPlayer.play()
+        avPlayer = AVPlayer(url: videoDetail.sd)
+        playerView.player = avPlayer
     }
 
 }
