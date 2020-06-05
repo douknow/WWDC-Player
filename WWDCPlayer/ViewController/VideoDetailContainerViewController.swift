@@ -21,6 +21,9 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     var videoDetail: VideoDetail!
     var subscriptions = Set<AnyCancellable>()
     var topOffsetConstraint: Constraint!
+    var subtitleViewController: SubtitleTableViewController?
+
+    var showingSubtitleMenu = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +40,9 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
                 self.setupPlayer()
             }
             .store(in: &subscriptions)
+
+        let tapRecongizer = UITapGestureRecognizer(target: self, action: #selector(hideSubtitleChooseMenu))
+        playerView.addGestureRecognizer(tapRecongizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +67,7 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
         navigationController?.navigationBar.isTranslucent = true
 
         playerView = PlayerView()
+        playerView.delegate = self
         view.addSubview(playerView) {
             $0.left.right.equalToSuperview()
             $0.top.equalToSuperview().offset(UIApplication.shared.statusBarFrame.height)
@@ -77,8 +84,70 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     }
     
     func setupPlayer() {
-        avPlayer = AVPlayer(url: videoDetail.sd)
-        playerView.player = avPlayer
+        playerView.video = video
+        playerView.videoDetail = videoDetail
+    }
+
+    @objc func showSubtitleChooseMenu() {
+        let subtitleViewController = SubtitleTableViewController()
+        subtitleViewController.delegate = self
+        var data = playerView.subtitles.map { $0.name }
+        data.append("关闭")
+        subtitleViewController.data = data
+        subtitleViewController.selected = IndexPath(row: data.count - 1, section: 0)
+        subtitleViewController.willMove(toParent: self)
+        view.addSubview(subtitleViewController.view)
+        subtitleViewController.view.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.top.bottom.equalTo(self.playerView)
+            $0.width.equalTo(200)
+        }
+        subtitleViewController.didMove(toParent: self)
+        self.subtitleViewController = subtitleViewController
+
+        subtitleViewController.view.transform = CGAffineTransform(translationX: 200, y: 0)
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            subtitleViewController.view.transform = .identity
+        }, completion: nil)
+    }
+
+    @objc func hideSubtitleChooseMenu() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseIn], animations: {
+            self.subtitleViewController?.view.transform = CGAffineTransform(translationX: 200, y: 0)
+        }) { _ in
+            self.subtitleViewController?.willMove(toParent: nil)
+            self.subtitleViewController?.view.removeFromSuperview()
+            self.subtitleViewController?.removeFromParent()
+            self.subtitleViewController?.didMove(toParent: nil)
+        }
+    }
+
+}
+
+
+extension VideoDetailContainerViewController: PlayerViewDelegate {
+
+    func playerView(_: PlayerView, subtitleTapped sender: UIButton?) {
+        showSubtitleChooseMenu()
+    }
+
+    func playerView(_: PlayerView, completeCache subtitle: Subtitle) {
+        let index = playerView.subtitles.firstIndex { $0.url == subtitle.url }!
+        subtitleViewController?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+
+}
+
+
+extension VideoDetailContainerViewController: SubtitleTableViewControllerDelegate {
+
+    func subtitleTableViewController(_ subtitleTableViewController: SubtitleTableViewController, didSelectedAt indexPath: IndexPath) {
+        playerView.switchSubtitle(subtitle: playerView.subtitles[indexPath.row])
+    }
+
+    func subtitleTableViewController(_ subtitleTableViewController: SubtitleTableViewController, isLoadingFor indexPath: IndexPath) -> Bool {
+        if indexPath.row >= playerView.subtitles.count { return false }
+        return !playerView.hasCached(with: playerView.subtitles[indexPath.row])
     }
 
 }

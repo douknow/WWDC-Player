@@ -13,6 +13,10 @@
 		5C1E5C152487B156000CE9DF /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C142487B156000CE9DF /* VideoView.swift */; };
 		5C1E5C172487B45C000CE9DF /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C162487B45C000CE9DF /* PlayerView.swift */; };
 		5C1E5C192487D897000CE9DF /* IconsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C182487D897000CE9DF /* IconsTableViewCell.swift */; };
+		5C1E5C1B2488E5AE000CE9DF /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C1A2488E5AE000CE9DF /* Downloader.swift */; };
+		5C1E5C2F2488F5BF000CE9DF /* WWDCPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C1E5C2E2488F5BF000CE9DF /* WWDCPlayerTests.swift */; };
+		5C1E5C372488F779000CE9DF /* demo.m3u8 in Resources */ = {isa = PBXBuildFile; fileRef = 5C1E5C362488F779000CE9DF /* demo.m3u8 */; };
+		5C1E5C3924890692000CE9DF /* prog_index.m3u8 in Resources */ = {isa = PBXBuildFile; fileRef = 5C1E5C3824890692000CE9DF /* prog_index.m3u8 */; };
 		5C2200982484D172004BF8E1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2200972484D172004BF8E1 /* main.swift */; };
 		5C22009E2484D553004BF8E1 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 5C22009D2484D553004BF8E1 /* SwiftSoup */; };
 		5C231FA7240CF33A001E25A6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 5C231FA6240CF33A001E25A6 /* Kingfisher */; };
@@ -27,6 +31,8 @@
 		5C231FBB240E467E001E25A6 /* DownloadItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C231FBA240E467E001E25A6 /* DownloadItemCell.xib */; };
 		5C231FBD240E48FD001E25A6 /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C231FBC240E48FD001E25A6 /* DownloadItem.swift */; };
 		5C4A0F74248501670026AAF6 /* AllVideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */; };
+		5CA1D73D248A3F8000934B7E /* fileSequence0.webvtt in Resources */ = {isa = PBXBuildFile; fileRef = 5CA1D73C248A3F8000934B7E /* fileSequence0.webvtt */; };
+		5CA1D73F248A5C2400934B7E /* SubtitleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1D73E248A5C2400934B7E /* SubtitleTableViewController.swift */; };
 		5CA7A3582484E17400BBD67E /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA7A3572484E17400BBD67E /* SplitViewController.swift */; };
 		5CA7A35A2484E19800BBD67E /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA7A3592484E19800BBD67E /* CategoryViewController.swift */; };
 		5CD88D55240CDEAC00948ADC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CD88D54240CDEAC00948ADC /* AppDelegate.swift */; };
@@ -45,6 +51,16 @@
 		5CEBE12D2411036C0026C533 /* ShareStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBE12C2411036C0026C533 /* ShareStore.swift */; };
 		5CEBE12F24112D750026C533 /* VideoDetailContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBE12E24112D750026C533 /* VideoDetailContainerViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5C1E5C312488F5BF000CE9DF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5CD88D49240CDEAC00948ADC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5CD88D50240CDEAC00948ADC;
+			remoteInfo = WWDCPlayer;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		5C2200932484D172004BF8E1 /* CopyFiles */ = {
@@ -65,6 +81,12 @@
 		5C1E5C142487B156000CE9DF /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		5C1E5C162487B45C000CE9DF /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		5C1E5C182487D897000CE9DF /* IconsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsTableViewCell.swift; sourceTree = "<group>"; };
+		5C1E5C1A2488E5AE000CE9DF /* Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		5C1E5C2C2488F5BF000CE9DF /* WWDCPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WWDCPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C1E5C2E2488F5BF000CE9DF /* WWDCPlayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WWDCPlayerTests.swift; sourceTree = "<group>"; };
+		5C1E5C302488F5BF000CE9DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5C1E5C362488F779000CE9DF /* demo.m3u8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = demo.m3u8; sourceTree = "<group>"; };
+		5C1E5C3824890692000CE9DF /* prog_index.m3u8 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = prog_index.m3u8; sourceTree = "<group>"; };
 		5C2200952484D172004BF8E1 /* DataDownloader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DataDownloader; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C2200972484D172004BF8E1 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		5C231FA8240D07E0001E25A6 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +99,8 @@
 		5C231FBA240E467E001E25A6 /* DownloadItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadItemCell.xib; sourceTree = "<group>"; };
 		5C231FBC240E48FD001E25A6 /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadItem.swift; sourceTree = "<group>"; };
 		5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllVideoTableViewController.swift; sourceTree = "<group>"; };
+		5CA1D73C248A3F8000934B7E /* fileSequence0.webvtt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fileSequence0.webvtt; sourceTree = "<group>"; };
+		5CA1D73E248A5C2400934B7E /* SubtitleTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleTableViewController.swift; sourceTree = "<group>"; };
 		5CA7A3572484E17400BBD67E /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
 		5CA7A3592484E19800BBD67E /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +122,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5C1E5C292488F5BF000CE9DF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5C2200922484D172004BF8E1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -132,6 +163,18 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		5C1E5C2D2488F5BF000CE9DF /* WWDCPlayerTests */ = {
+			isa = PBXGroup;
+			children = (
+				5C1E5C3824890692000CE9DF /* prog_index.m3u8 */,
+				5CA1D73C248A3F8000934B7E /* fileSequence0.webvtt */,
+				5C1E5C362488F779000CE9DF /* demo.m3u8 */,
+				5C1E5C2E2488F5BF000CE9DF /* WWDCPlayerTests.swift */,
+				5C1E5C302488F5BF000CE9DF /* Info.plist */,
+			);
+			path = WWDCPlayerTests;
+			sourceTree = "<group>";
+		};
 		5C2200962484D172004BF8E1 /* DataDownloader */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +195,7 @@
 			children = (
 				5CD88D53240CDEAC00948ADC /* WWDCPlayer */,
 				5C2200962484D172004BF8E1 /* DataDownloader */,
+				5C1E5C2D2488F5BF000CE9DF /* WWDCPlayerTests */,
 				5CD88D52240CDEAC00948ADC /* Products */,
 				5C22009C2484D553004BF8E1 /* Frameworks */,
 			);
@@ -162,6 +206,7 @@
 			children = (
 				5CD88D51240CDEAC00948ADC /* WWDCPlayer.app */,
 				5C2200952484D172004BF8E1 /* DataDownloader */,
+				5C1E5C2C2488F5BF000CE9DF /* WWDCPlayerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				5CD88D71240CE23B00948ADC /* WWDCService.swift */,
+				5C1E5C1A2488E5AE000CE9DF /* Downloader.swift */,
 				5CEBE12A241103340026C533 /* ContainerService.swift */,
 			);
 			path = Service;
@@ -219,6 +265,7 @@
 				5C231FA8240D07E0001E25A6 /* HomeViewController.swift */,
 				5C231FAA240D2C45001E25A6 /* VideoDetailViewController.swift */,
 				5C231FB6240E4644001E25A6 /* DownloadViewController.swift */,
+				5CA1D73E248A5C2400934B7E /* SubtitleTableViewController.swift */,
 				5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */,
 				5CEBE1272410D89B0026C533 /* PlayerViewController.swift */,
 				5CEBE12E24112D750026C533 /* VideoDetailContainerViewController.swift */,
@@ -229,6 +276,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5C1E5C2B2488F5BF000CE9DF /* WWDCPlayerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C1E5C332488F5BF000CE9DF /* Build configuration list for PBXNativeTarget "WWDCPlayerTests" */;
+			buildPhases = (
+				5C1E5C282488F5BF000CE9DF /* Sources */,
+				5C1E5C292488F5BF000CE9DF /* Frameworks */,
+				5C1E5C2A2488F5BF000CE9DF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5C1E5C322488F5BF000CE9DF /* PBXTargetDependency */,
+			);
+			name = WWDCPlayerTests;
+			productName = WWDCPlayerTests;
+			productReference = 5C1E5C2C2488F5BF000CE9DF /* WWDCPlayerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		5C2200942484D172004BF8E1 /* DataDownloader */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5C22009B2484D172004BF8E1 /* Build configuration list for PBXNativeTarget "DataDownloader" */;
@@ -282,6 +347,10 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = lcrystal;
 				TargetAttributes = {
+					5C1E5C2B2488F5BF000CE9DF = {
+						CreatedOnToolsVersion = 11.5;
+						TestTargetID = 5CD88D50240CDEAC00948ADC;
+					};
 					5C2200942484D172004BF8E1 = {
 						CreatedOnToolsVersion = 11.5;
 					};
@@ -311,11 +380,22 @@
 			targets = (
 				5CD88D50240CDEAC00948ADC /* WWDCPlayer */,
 				5C2200942484D172004BF8E1 /* DataDownloader */,
+				5C1E5C2B2488F5BF000CE9DF /* WWDCPlayerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5C1E5C2A2488F5BF000CE9DF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C1E5C372488F779000CE9DF /* demo.m3u8 in Resources */,
+				5C1E5C3924890692000CE9DF /* prog_index.m3u8 in Resources */,
+				5CA1D73D248A3F8000934B7E /* fileSequence0.webvtt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5CD88D4F240CDEAC00948ADC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -331,6 +411,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5C1E5C282488F5BF000CE9DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C1E5C2F2488F5BF000CE9DF /* WWDCPlayerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5C2200912484D172004BF8E1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -348,6 +436,7 @@
 				5CA7A35A2484E19800BBD67E /* CategoryViewController.swift in Sources */,
 				5C1E5C112485676D000CE9DF /* AutolayoutTextTableViewCell.swift in Sources */,
 				5CD88D72240CE23B00948ADC /* WWDCService.swift in Sources */,
+				5CA1D73F248A5C2400934B7E /* SubtitleTableViewController.swift in Sources */,
 				5C231FAB240D2C45001E25A6 /* VideoDetailViewController.swift in Sources */,
 				5CEBE1282410D89B0026C533 /* PlayerViewController.swift in Sources */,
 				5CA7A3582484E17400BBD67E /* SplitViewController.swift in Sources */,
@@ -366,6 +455,7 @@
 				5CEBE12D2411036C0026C533 /* ShareStore.swift in Sources */,
 				5C231FB9240E4668001E25A6 /* DownloadItemCell.swift in Sources */,
 				5C231FB7240E4644001E25A6 /* DownloadViewController.swift in Sources */,
+				5C1E5C1B2488E5AE000CE9DF /* Downloader.swift in Sources */,
 				5C231FBD240E48FD001E25A6 /* DownloadItem.swift in Sources */,
 				5CD88D6F240CE13800948ADC /* Video.swift in Sources */,
 				5C1E5C0E24853714000CE9DF /* HomeTableHeaderView.swift in Sources */,
@@ -373,6 +463,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5C1E5C322488F5BF000CE9DF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5CD88D50240CDEAC00948ADC /* WWDCPlayer */;
+			targetProxy = 5C1E5C312488F5BF000CE9DF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		5CD88D5A240CDEAC00948ADC /* Main.storyboard */ = {
@@ -394,6 +492,48 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5C1E5C342488F5BF000CE9DF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3D29G3C5M7;
+				INFOPLIST_FILE = WWDCPlayerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lcrystal.com.WWDCPlayerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDCPlayer.app/WWDCPlayer";
+			};
+			name = Debug;
+		};
+		5C1E5C352488F5BF000CE9DF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3D29G3C5M7;
+				INFOPLIST_FILE = WWDCPlayerTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = lcrystal.com.WWDCPlayerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WWDCPlayer.app/WWDCPlayer";
+			};
+			name = Release;
+		};
 		5C2200992484D172004BF8E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -579,6 +719,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5C1E5C332488F5BF000CE9DF /* Build configuration list for PBXNativeTarget "WWDCPlayerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C1E5C342488F5BF000CE9DF /* Debug */,
+				5C1E5C352488F5BF000CE9DF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		5C22009B2484D172004BF8E1 /* Build configuration list for PBXNativeTarget "DataDownloader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

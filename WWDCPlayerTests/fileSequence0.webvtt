@@ -1,0 +1,81 @@
+WEBVTT
+X-TIMESTAMP-MAP=MPEGTS:181083,LOCAL:00:00:00.000
+
+00:00:01.516 --> 00:00:04.500 A:middle
+[ Music ]
+
+00:00:06.516 --> 00:00:09.016 A:middle
+[ Applause ]
+
+00:00:09.516 --> 00:00:11.056 A:middle
+&gt;&gt; Good morning everyone, my
+
+00:00:11.056 --> 00:00:12.736 A:middle
+name is Michael Gorbach and I'll
+
+00:00:12.736 --> 00:00:13.666 A:middle
+be presenting today with my
+
+00:00:13.666 --> 00:00:15.226 A:middle
+colleague John Nefulda from
+
+00:00:15.226 --> 00:00:18.296 A:middle
+Apple's Accessibility team.
+
+00:00:18.506 --> 00:00:20.536 A:middle
+I'm sure all of you are excited
+
+00:00:20.576 --> 00:00:22.276 A:middle
+about SwiftUI and how it can
+
+00:00:22.276 --> 00:00:24.086 A:middle
+help you build better apps
+
+00:00:24.256 --> 00:00:25.886 A:middle
+faster and easier.
+
+00:00:27.046 --> 00:00:29.176 A:middle
+I am also really excited about
+
+00:00:29.176 --> 00:00:31.436 A:middle
+SwiftUI and specifically, I'm
+
+00:00:31.436 --> 00:00:33.916 A:middle
+excited about its potential for
+
+00:00:33.916 --> 00:00:34.676 A:middle
+Accessibility.
+
+00:00:35.656 --> 00:00:36.566 A:middle
+We're going to tell you today
+
+00:00:36.566 --> 00:00:38.476 A:middle
+how SwiftUI can help you build
+
+00:00:38.686 --> 00:00:41.316 A:middle
+the next generation of apps for
+
+00:00:41.316 --> 00:00:42.676 A:middle
+all of your users.
+
+00:00:43.176 --> 00:00:46.496 A:middle
+We're going to kick it off with
+
+00:00:46.546 --> 00:00:48.436 A:middle
+a quick introduction to
+
+00:00:48.436 --> 00:00:50.506 A:middle
+Accessibility and our
+
+00:00:50.506 --> 00:00:51.946 A:middle
+Accessibility technologies on
+
+00:00:51.946 --> 00:00:52.716 A:middle
+our platforms.
+
+00:00:55.216 --> 00:00:58.426 A:middle
+Then talk a little bit about how
+
+00:00:58.426 --> 00:01:00.346 A:middle
+SwiftUI make your -- makes your
+
