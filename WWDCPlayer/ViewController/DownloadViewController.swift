@@ -13,21 +13,38 @@ class DownloadViewController: UITableViewController {
     
     var downloadItems: [DownloadItem] = []
     var shareStore = ContainerService.shared.shareStore
+    var emptyView: UIView!
     
     var subscriptions = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        emptyView = UIView()
+        emptyView.isHidden = true
+        emptyView.backgroundColor = .systemBackground
+        let label = UILabel()
+        label.textAlignment = .center
+        label.text = "没有正在下载的视频"
+        emptyView.addSubview(label) {
+            $0.center.equalToSuperview()
+        }
+        tableView.addSubview(emptyView) {
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom).inset(20)
+            $0.width.leading.equalToSuperview()
+        }
         
         let nib = UINib(nibName: "DownloadItemCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: DownloadItemCell.identifier)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+
         downloadItems = shareStore.allDownloadItems
-        tableView.reloadData()
+
+        if downloadItems.isEmpty {
+            showEmptyView()
+        } else {
+            tableView.reloadData()
+        }
     }
     
     @IBAction func close(_ sender: Any?) {
@@ -77,6 +94,11 @@ class DownloadViewController: UITableViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
             item.remove()
         }
+    }
+
+    func showEmptyView() {
+        tableView.separatorStyle = .none
+        emptyView.isHidden = false
     }
 
 }

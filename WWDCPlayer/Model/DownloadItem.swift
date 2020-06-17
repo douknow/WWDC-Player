@@ -15,22 +15,32 @@ class DownloadItem: NSObject {
         case finished = 1
     }
     
-    enum VideoType {
-        case hd, sd
+    enum VideoType: Int {
+        case hd = 0, sd
     }
     
     enum Status {
         case unstart
-        case downloading, paused, finished
+        case downloading, paused, downloadSubtitles, finished
+    }
+
+    static func parse(from videos: [Video], coreDataStack: CoreDataStack) -> [DownloadItem] {
+        return videos.compactMap { video in
+            guard let downloadData = video.downloadData,
+                let url = downloadData.url,
+                let m3u8 = downloadData.m3u8 else { return nil }
+            return DownloadItem(video: video, resolution: downloadData.resolution, url: url, m3u8: m3u8, coreDataStack: coreDataStack)
+        }
     }
     
     @Published var downloadProgress: Double = 0
     @Published var status: Status = .unstart
     
     let video: Video
+    let downloadData: DownloadData
     let downloadURL: URL
+    var m3u8: URL
     let coreDataStack: CoreDataStack
-    var downloadData: DownloadData!
     let fileManager = FileManager.default
     
     var dataTask: URLSessionDownloadTask!
@@ -43,47 +53,38 @@ class DownloadItem: NSObject {
         return session
     }()
     
-    init(video: Video, url: URL, coreDataStack: CoreDataStack, downloadData: DownloadData? = nil) {
+    init(video: Video, resolution: VideoType, url: URL, m3u8: URL, coreDataStack: CoreDataStack) {
         self.video = video
         self.downloadURL = url
         self.coreDataStack = coreDataStack
+        self.m3u8 = m3u8
+
+        if let downloadData = video.downloadData {
+            self.downloadData = downloadData
+            status = .paused
+            downloadProgress = downloadData.progress
+        } else {
+            let downloadData = DownloadData(context: coreDataStack.context)
+            downloadData.id = UUID()
+            downloadData.progress = 0
+            downloadData.downloadStatus = .downloading
+            downloadData.url = url
+            downloadData.m3u8 = m3u8
+            downloadData.resolution = resolution
+            video.downloadData = downloadData
+            coreDataStack.save()
+            self.downloadData = downloadData
+        }
         
         super.init()
-        
-        if let downloadData = downloadData {
-            self.downloadData = downloadData
-        } else {
-            self.downloadData = createDownloadData()
-        }
-        
-        resumeLocation = createResumeURL(self.downloadData.id!)
-        fileLocation = createFileLocation(self.downloadData.id!)
-        
-        downloadProgress = self.downloadData.progress
-        if let downloadStatus = DownloadStatus(rawValue: Int(self.downloadData.status)) {
-            if downloadStatus == .downloading {
-                status = .paused
-            } else {
-                status = .finished
-            }
-        }
-        
+
+        resumeLocation = createResumeURL(video.id!)
+        fileLocation = Self.createFileLocation(video.id!)
+
         tryResotreResumeData()
     }
     
-    func createDownloadData() -> DownloadData {
-        let downloadData = DownloadData(context: coreDataStack.context)
-        let id = UUID()
-        downloadData.id = id 
-        downloadData.video = video
-        downloadData.url = downloadURL
-        downloadData.progress = 0
-        downloadData.status = 0
-        coreDataStack.save()
-        return downloadData
-    }
-    
-    func createResumeURL(_ id: UUID) -> URL {
+    func createResumeURL(_ id: String) -> URL {
         guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             fatalError("Could not find the cache directory")
         }
@@ -92,18 +93,13 @@ class DownloadItem: NSObject {
         try? FileManager.default.createDirectory(at: cacheURL, withIntermediateDirectories: true, attributes: [:])
         
         return cacheURL
-            .appendingPathComponent(id.uuidString)
+            .appendingPathComponent(id)
     }
     
-    func createFileLocation(_ id: UUID) -> URL {
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            fatalError("Could not find the download directory")
-        }
-        
-        let videoURL = url.appendingPathComponent("videos")
-        try? FileManager.default.createDirectory(at: videoURL, withIntermediateDirectories: true, attributes: [:])
-        let destination = videoURL.appendingPathComponent(id.uuidString)
-        return destination
+    static func createFileLocation(_ id: String) -> URL {
+        return Folder.video(for: id)
+            .appendingPathComponent(id)
+            .appendingPathExtension("mp4")
     }
     
     func deleteCacheIfNeed() {
@@ -142,6 +138,7 @@ class DownloadItem: NSObject {
     func remove() {
         deleteCacheIfNeed()
         deleteFileIfNeed()
+
         coreDataStack.context.delete(downloadData)
         coreDataStack.save()
     }
@@ -179,24 +176,60 @@ extension DownloadItem: URLSessionDownloadDelegate {
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
-            print("🥶 Complete download with an error: \(error) title: \(video.title)")
+            print("🥶 Complete download with an error: \(error.localizedDescription) title: \(video.title!)")
         }
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
         let percent = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        print("Download \(video.title!) percent: \(percent)")
         downloadProgress = percent
     }
     
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        print("Finish download: \(video.title)")
+        print("Finish download: \(video.title!)")
         status = .finished
         moveToVideoLocation(from: location)
         deleteCacheIfNeed()
-        
+
+        status = .downloadSubtitles
+        downloadSubtitles { [weak self] in
+            self?.completeDownloadData()
+            self?.status = .finished
+        }
+    }
+
+    func completeDownloadData() {
         downloadData.progress = 1
-        downloadData.status = 1
+        downloadData.downloadStatus = .downloaded
         coreDataStack.save()
+    }
+
+    func downloadSubtitles(completion: () -> Void) {
+        let downloader = Downloader()
+        let subtitleUrl = Folder.subtitle(for: video)
+        downloader.downloadSubtitles(link: m3u8) { result in
+            switch result {
+            case .success(let subtitles):
+                subtitles.forEach { subtitle in
+                    downloader.downloadSubtitleContent(subtitle: subtitle) { result in
+                        switch result {
+                        case .success(let args):
+                            let (subtitle, content) = args
+                            let url = subtitleUrl
+                                .appendingPathComponent("\(subtitle.groupId)-\(subtitle.language)-\(subtitle.name)")
+                                .appendingPathExtension("txt")
+                            try? content.write(to: url, atomically: true, encoding: .utf8)
+                        case .failure(let error):
+                            print("download subtitle content error: \(error.localizedDescription) of \(subtitle.url.absoluteString)")
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("download error: \(error.localizedDescription)")
+            }
+        }
+        completion()
     }
     
 }

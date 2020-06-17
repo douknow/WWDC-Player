@@ -23,6 +23,9 @@ class PlayerView: VideoView {
     var allTimeLabel: UILabel!
     var resolutionButton: UIButton!
     var subtitleButton: UIButton!
+    var controlsView: UIView!
+    var subtitleView: UIView!
+    var subtitleLabel: UILabel!
 
     var statusObserver: NSKeyValueObservation?
 
@@ -38,6 +41,8 @@ class PlayerView: VideoView {
     let downloader = Downloader()
     var subtitles: [Subtitle] = []
     var subtitleCache: [URL: [SubtitleLine]] = [:]
+    var selectedSubtitle: Subtitle?
+    var selectedSubtitleLines: [SubtitleLine]?
 
     weak var delegate: PlayerViewDelegate?
 
@@ -68,6 +73,9 @@ class PlayerView: VideoView {
         super.init(frame: frame)
 
         setupView()
+
+//        let hoverRecognizer = UIHoverGestureRecognizer(target: self, action: #selector(hoveringAction(_:)))
+//        addGestureRecognizer(hoverRecognizer)
     }
 
     required init?(coder: NSCoder) {
@@ -75,20 +83,21 @@ class PlayerView: VideoView {
     }
 
     func setupView() {
-        playButton = UIButton(type: .system)
-        playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        playButton.isHidden = true
-        playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
-        addSubview(playButton) {
-            $0.width.height.equalTo(44)
-            $0.leading.bottom.equalToSuperview().inset(16)
+        controlsView = UIView()
+        controlsView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        controlsView.layer.cornerRadius = 6
+        addSubview(controlsView) {
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().offset(-10)
+            $0.height.equalTo(44)
         }
 
-        indicator = UIActivityIndicatorView(style: .medium)
-        indicator.hidesWhenStopped = true
-        indicator.startAnimating()
-        addSubview(indicator) {
-            $0.center.equalTo(self.playButton)
+        playButton = UIButton(type: .system)
+        playButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playButton.alpha = 0
+        playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
+        playButton.snp.makeConstraints {
+            $0.width.height.equalTo(44)
         }
 
         resolutionButton = UIButton(type: .system)
@@ -104,6 +113,7 @@ class PlayerView: VideoView {
 
         currentTimeLabel = UILabel()
         currentTimeLabel.text = "00:00"
+        currentTimeLabel.textColor = .systemBackground
         currentTimeLabel.snp.makeConstraints {
             $0.width.equalTo(47)
         }
@@ -112,22 +122,49 @@ class PlayerView: VideoView {
         progressView.value = 0
         progressView.setThumbImage(UIImage(systemName: "rhombus.fill"), for: .normal)
         progressView.setContentHuggingPriority(.init(1), for: .horizontal)
+        progressView.addTarget(self, action: #selector(progressBarChangeAction(_:)), for: .valueChanged)
+        progressView.addTarget(self, action: #selector(progressBarTouchUpAction(_:)), for: .touchUpInside)
 
         allTimeLabel = UILabel()
         allTimeLabel.text = "00:00"
+        allTimeLabel.textColor = .systemBackground
         allTimeLabel.snp.makeConstraints {
             $0.width.equalTo(47)
         }
 
-        let stackView = UIStackView(arrangedSubviews: [currentTimeLabel, progressView, allTimeLabel, resolutionButton, subtitleButton])
+        let stackView = UIStackView(arrangedSubviews: [playButton, currentTimeLabel, progressView, allTimeLabel, resolutionButton, subtitleButton])
         stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .fill
         stackView.spacing = 16
-        addSubview(stackView) {
-            $0.leading.equalTo(self.playButton.snp.trailing).offset(16)
-            $0.centerY.equalTo(self.playButton)
+        controlsView.addSubview(stackView) {
+            $0.leading.equalToSuperview().inset(16)
             $0.trailing.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview()
+        }
+
+        indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        indicator.startAnimating()
+        controlsView.addSubview(indicator) {
+            $0.center.equalTo(self.playButton)
+        }
+
+        subtitleView = UIView()
+        subtitleView.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        subtitleView.layer.cornerRadius = 8
+        addSubview(subtitleView) {
+            $0.leading.equalTo(self.controlsView.snp.leading)
+            $0.bottom.equalTo(self.controlsView.snp.top).offset(-10)
+        }
+
+        subtitleLabel = UILabel()
+        subtitleLabel.textColor = .systemBackground
+        subtitleLabel.text = " "
+        subtitleLabel.numberOfLines = 0
+        subtitleView.addSubview(subtitleLabel) {
+            $0.edges.equalToSuperview().inset(10)
         }
     }
 
@@ -145,6 +182,7 @@ class PlayerView: VideoView {
             if percent == 1 {
                 self?.playButton.setImage(self?.refreshImage, for: .normal)
             }
+            self?.updateCurrentSubtitle(for: time)
         })
     }
 
@@ -158,7 +196,7 @@ class PlayerView: VideoView {
             print("Can play right now ...")
             DispatchQueue.main.async { [weak self] in
                 self?.indicator.stopAnimating()
-                self?.playButton.isHidden = false
+                self?.playButton.alpha = 1
             }
         }
 
@@ -253,14 +291,9 @@ class PlayerView: VideoView {
                             switch result {
                             case .success(let args):
                                 let (subtitle, content) = args
-                                let lines = self.downloader.parseSubtitleContent(content: content)
-                                self.subtitleCache[subtitle.url] = lines
-                                DispatchQueue.main.async {
-                                    self.delegate?.playerView(self, completeCache: subtitle)
-                                }
+                                self.completeDownloadSubtitle(subtitle: subtitle, content: content)
                             case .failure(let error):
-                                // handle error
-                                break
+                                print("Download subtitle error:  \(error.localizedDescription)")
                             }
                         }
                     }
@@ -271,16 +304,115 @@ class PlayerView: VideoView {
         }
     }
 
+    func loadStaticSubtitles(by video: Video) {
+        guard let downloadData = video.downloadData else { return }
+        var subtitles = Folder.subtitles(video: video, for: downloadData.resolution)
+        if subtitles.isEmpty {
+            subtitles = Folder.subtitles(video: video, for: downloadData.resolution == .hd ? .sd : .hd)
+        }
+        self.subtitles = subtitles
+        subtitles
+            .map { subtitle -> (Subtitle, String) in (subtitle, try! String(contentsOf: subtitle.url)) }
+            .forEach { args in
+                completeDownloadSubtitle(subtitle: args.0, content: args.1)
+            }
+    }
+
+    func completeDownloadSubtitle(subtitle: Subtitle, content: String) {
+        let lines = self.downloader.parseSubtitleContent(content: content)
+        subtitleCache[subtitle.url] = lines
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.subtitleButton.isEnabled = true
+            self.delegate?.playerView(self, completeCache: subtitle)
+        }
+    }
+
     @objc func subtitleButtonAction() {
         delegate?.playerView(self, subtitleTapped: nil)
     }
 
-    func switchSubtitle(subtitle: Subtitle) {
-        print("switch to subtitle language: \(subtitle.language)")
+    func switchSubtitle(subtitle: Subtitle?) {
+        print("switch to subtitle language: \(subtitle?.language ?? "NIL")")
+        if let subtitle = subtitle {
+            let subtitleLines = subtitleCache[subtitle.url]
+            showSubtitle()
+            selectedSubtitle = subtitle
+            selectedSubtitleLines = subtitleLines
+            if let time = playerItem?.currentTime() {
+                updateCurrentSubtitle(for: time)
+            }
+        } else {
+            selectedSubtitle = nil
+            selectedSubtitleLines = nil
+            closeSubtitle()
+        }
     }
 
     func hasCached(with subtitle: Subtitle) -> Bool {
         return subtitleCache[subtitle.url] != nil
+    }
+
+    @objc func hoveringAction(_ recognizer: UIHoverGestureRecognizer) {
+        switch recognizer.state  {
+        case .began:
+            showControlsView()
+//        case .changed:
+//            showControlsView()
+        case .ended, .cancelled:
+            hideControlsView()
+        default:
+            break
+        }
+    }
+
+    func hideControlsView() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseIn], animations: {
+            self.controlsView.alpha = 0
+        }, completion: nil)
+    }
+
+    func showControlsView() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
+            self.controlsView.alpha = 1
+        }, completion: nil)
+    }
+
+    func updateCurrentSubtitle(for time: CMTime) {
+        guard let subtitleLines = selectedSubtitleLines else { return }
+        let seconds = time.seconds
+        guard let subtitleLine = subtitleLines.first(where: { subtitleLine -> Bool in
+            return seconds >= subtitleLine.startTime && seconds < subtitleLine.endTime
+        }) else { return }
+        subtitleLabel.text = subtitleLine.value
+    }
+
+    func closeSubtitle() {
+        guard !subtitleView.isHidden else { return }
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseIn], animations: {
+            self.subtitleView.alpha = 0
+        }) { _ in
+            self.subtitleView.isHidden = true
+        }
+    }
+
+    func showSubtitle() {
+        guard subtitleView.isHidden else { return }
+        subtitleView.isHidden = false
+        subtitleView.alpha = 0
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut], animations: {
+            self.subtitleView.alpha = 1
+        })
+    }
+
+    @objc func progressBarChangeAction(_ sender: UISlider) {
+    }
+
+    @objc func progressBarTouchUpAction(_ sender: UISlider) {
+        guard let playerItem = playerItem else { return }
+        let allTime = playerItem.duration
+        let current = CMTimeMultiplyByFloat64(allTime, multiplier: Float64(sender.value))
+        playerItem.seek(to: current, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: nil)
     }
 
 }

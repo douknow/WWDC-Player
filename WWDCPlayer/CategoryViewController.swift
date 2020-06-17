@@ -33,6 +33,8 @@ class CategoryViewController: UITableViewController {
             showAllVideo()
         case (1, 0):
             showLikedVideo()
+        case (1, 1):
+            showDownlaoded()
         default:
             break
         }
@@ -64,6 +66,12 @@ class CategoryViewController: UITableViewController {
         }
         let vc = AllVideoTableViewController()
         vc.group = Group(title: "Liked", videos: videos)
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    func showDownlaoded() {
+        let vc = DownloadRelatedVideoViewController()
+        vc.coreDataStack = coreDataStack
         navigationController?.pushViewController(vc, animated: true)
     }
 

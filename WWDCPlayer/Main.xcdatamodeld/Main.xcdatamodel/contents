@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DownloadData" representedClassName="DownloadData" syncable="YES" codeGenerationType="class">
+        <attribute name="des" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="m3u8" optional="YES" attributeType="URI"/>
         <attribute name="progress" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="resolutionNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="status" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="url" optional="YES" attributeType="URI"/>
         <relationship name="video" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Video"/>
@@ -16,11 +19,13 @@
         <attribute name="liked" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="likeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="previewImageURL" optional="YES" attributeType="URI"/>
+        <attribute name="subtitlesLocation" optional="YES" attributeType="URI"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="urlStr" optional="YES" attributeType="String"/>
+        <relationship name="downloadData" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DownloadData"/>
     </entity>
     <elements>
-        <element name="DownloadData" positionX="-45" positionY="63" width="128" height="118"/>
-        <element name="Video" positionX="-63" positionY="-18" width="128" height="193"/>
+        <element name="DownloadData" positionX="-45" positionY="63" width="128" height="163"/>
+        <element name="Video" positionX="-63" positionY="-18" width="128" height="223"/>
     </elements>
 </model>

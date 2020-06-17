@@ -69,6 +69,9 @@ class DownloadItemCell: UITableViewCell {
                 case .paused:
                     text = "已暂停"
                     self.actionButton.setImage(downloadImage, for: .normal)
+                case .downloadSubtitles:
+                    text = "正在下载字幕"
+                    self.actionButton.setImage(nil, for: .normal)
                 case .finished:
                     text = "已完成"
                 }

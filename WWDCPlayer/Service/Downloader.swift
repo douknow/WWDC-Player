@@ -41,7 +41,7 @@ class Downloader {
         }
     }
 
-    func parseSubtitles(content: String, baseLink: URL) -> [Subtitle] {
+    private func parseSubtitles(content: String, baseLink: URL) -> [Subtitle] {
         let lines = content.split(separator: .BackslashN)
             .filter { $0.hasPrefix("#EXT-X-MEDIA:TYPE=SUBTITLES") }
             .map { String($0) }
@@ -74,14 +74,6 @@ class Downloader {
                     fullSubtitle += content
                 }
                 completion(.success((subtitle, fullSubtitle)))
-//                let fm = FileManager.default
-//                var url = fm.urls(for: .downloadsDirectory, in: .userDomainMask)[0]
-//                url.appendPathComponent("subtitles")
-//                try fm.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-//                let path = "\(link.deletingLastPathComponent().lastPathComponent)-\(subtitle.groupId)-\(subtitle.language).webvtt"
-//                url.appendPathComponent()
-//                fm.createFile(atPath: url.path, contents: fullSubtitle.data(using: .utf8), attributes: nil)
-//                print(url.absoluteString)
             } catch {
                 print("Download subtitle error: \(error)")
                 completion(.failure(.download))

@@ -31,16 +31,10 @@ class ShareStore {
     }
     
     func restoreDownloadList() {
-        let request: NSFetchRequest<DownloadData> = DownloadData.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: false)]
-        do {
-            let downloadDatas = try coreDataStack.context.fetch(request)
-            allDownloadItems = downloadDatas.map {
-                DownloadItem(video: $0.video!, url: $0.url!, coreDataStack: self.coreDataStack, downloadData: $0)
-            }
-        } catch {
-            print("Could fetch download data from core data: \(error)")
-        }
+        let request: NSFetchRequest<Video> = Video.fetchRequest()
+        request.predicate = NSPredicate(format: "%@ != nil", argumentArray: [#keyPath(Video.downloadData)])
+        let videos = (try? coreDataStack.context.fetch(request)) ?? []
+        allDownloadItems = DownloadItem.parse(from: videos, coreDataStack: coreDataStack)
     }
     
 }

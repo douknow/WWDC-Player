@@ -31,10 +31,10 @@ class WWDCPlayerTests: XCTestCase {
         let url = Bundle(for: WWDCPlayerTests.self).url(forResource: "demo", withExtension: "m3u8")!
         let content = try! String(contentsOf: url)
         let downloader = Downloader()
-        let subtitles = downloader.parseSubtitles(content: content, baseLink: URL(string: "")!)
-        for subtitle in subtitles {
-            print(subtitle)
-        }
+//        let subtitles = downloader.parseSubtitles(content: content, baseLink: URL(string: "")!)
+//        for subtitle in subtitles {
+//            print(subtitle)
+//        }
     }
 
     func testParseSubtitleSequences() throws {
@@ -48,7 +48,7 @@ class WWDCPlayerTests: XCTestCase {
     func testDownloadSubtitle() throws {
         let url = URL(string: "https://devstreaming-cdn.apple.com/videos/wwdc/2019/238w8avpcuaf5ox/238/hls_vod_mvp.m3u8")!
         let downloader = Downloader()
-        downloader.downloadSubtitle(link: url)
+//        downloader.downloadSubtitle(link: url)
         let exp = expectation(description: "...")
         wait(for: [exp], timeout: 100)
     }
@@ -65,6 +65,24 @@ class WWDCPlayerTests: XCTestCase {
         measure {
             // Put the code you want to measure the time of here.
         }
+    }
+
+    func testDownloadSubtitles() throws {
+        let downloader = Downloader()
+        let testUrl = URL(string: "https://devstreaming-cdn.apple.com/videos/wwdc/2017/207mg6u1b7mfd02n/207/hls_vod_mvp.m3u8")!
+        let exp = expectation(description: "subtitle parse")
+        downloader.downloadSubtitles(link: testUrl) { result in
+            switch result {
+            case .success(let subtitles):
+                subtitles.forEach { subtitle in
+                    print(subtitle.groupId + " - " + subtitle.name)
+                    exp.fulfill()
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+        wait(for: [exp], timeout: 10)
     }
 
 }

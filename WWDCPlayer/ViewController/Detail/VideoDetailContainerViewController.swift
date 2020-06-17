@@ -16,22 +16,29 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     var infoViewController: VideoDetailViewController!
     var playerView: PlayerView!
     var avPlayer: AVPlayer!
-    var video: Video!
+    var video: Video?
     let playerViewAspect: CGFloat = 459.0/817
     var videoDetail: VideoDetail!
     var subscriptions = Set<AnyCancellable>()
-    var topOffsetConstraint: Constraint!
     var subtitleViewController: SubtitleTableViewController?
 
     var showingSubtitleMenu = false
+
+    var isDownloaded: Bool {
+        guard let video = video,
+            let downloadData = video.downloadData,
+            downloadData.downloadStatus == .downloaded
+            else { return false }
+
+        return true
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
-        infoViewController = storyboard!.instantiateViewController(identifier: "VideoDetailViewController")
-        infoViewController.video = video
+        setupInfoViewController()
         setupViews()
         
         infoViewController.didLoadvideoDetail
@@ -43,6 +50,10 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
 
         let tapRecongizer = UITapGestureRecognizer(target: self, action: #selector(hideSubtitleChooseMenu))
         playerView.addGestureRecognizer(tapRecongizer)
+
+        if isDownloaded {
+            setupPlayer()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,42 +70,60 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+    }
 
-        topOffsetConstraint.update(offset: view.frame.width * playerViewAspect + UIApplication.shared.statusBarFrame.height)
+    func setupInfoViewController() {
+        infoViewController = storyboard!.instantiateViewController(identifier: "VideoDetailViewController")
+        infoViewController.video = video
+        infoViewController.downloaded = isDownloaded
     }
     
-    func setupViews() {        
+    func setupViews() {
         navigationController?.navigationBar.isTranslucent = true
 
         playerView = PlayerView()
         playerView.delegate = self
         view.addSubview(playerView) {
             $0.left.right.equalToSuperview()
-            $0.top.equalToSuperview().offset(UIApplication.shared.statusBarFrame.height)
+            $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
             $0.height.equalTo(self.view.snp.width).multipliedBy(self.playerViewAspect)
         }
 
         infoViewController.willMove(toParent: self)
         view.addSubview(infoViewController.view) {
             $0.left.bottom.right.equalToSuperview()
-            topOffsetConstraint = $0.top.equalToSuperview().offset(0).constraint
-            topOffsetConstraint.activate()
+            $0.top.equalTo(self.playerView.snp.bottom)
         }
         infoViewController.didMove(toParent: self)
     }
     
     func setupPlayer() {
-        playerView.video = video
-        playerView.videoDetail = videoDetail
+        if isDownloaded {
+            let url = Folder.videoFile(for: video!)
+            let playerItem = AVPlayerItem(url: url)
+            playerView.playerItem = playerItem
+            loadSubtitles()
+        } else {
+            playerView.video = video
+            playerView.videoDetail = videoDetail
+        }
+    }
+
+    func loadSubtitles() {
+        guard let video = video else { return }
+        playerView.loadStaticSubtitles(by: video)
     }
 
     @objc func showSubtitleChooseMenu() {
+        playerView.hideControlsView()
+
         let subtitleViewController = SubtitleTableViewController()
         subtitleViewController.delegate = self
+        let selectedIndex = playerView.subtitles.firstIndex(where: { $0.name == playerView.selectedSubtitle?.name }) ?? playerView.subtitles.count
         var data = playerView.subtitles.map { $0.name }
         data.append("关闭")
         subtitleViewController.data = data
-        subtitleViewController.selected = IndexPath(row: data.count - 1, section: 0)
+        subtitleViewController.selected = IndexPath(row: selectedIndex, section: 0)
         subtitleViewController.willMove(toParent: self)
         view.addSubview(subtitleViewController.view)
         subtitleViewController.view.snp.makeConstraints {
@@ -119,6 +148,8 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
             self.subtitleViewController?.view.removeFromSuperview()
             self.subtitleViewController?.removeFromParent()
             self.subtitleViewController?.didMove(toParent: nil)
+
+            self.playerView.showControlsView()
         }
     }
 
@@ -142,7 +173,12 @@ extension VideoDetailContainerViewController: PlayerViewDelegate {
 extension VideoDetailContainerViewController: SubtitleTableViewControllerDelegate {
 
     func subtitleTableViewController(_ subtitleTableViewController: SubtitleTableViewController, didSelectedAt indexPath: IndexPath) {
-        playerView.switchSubtitle(subtitle: playerView.subtitles[indexPath.row])
+        hideSubtitleChooseMenu()
+        if indexPath.row >= playerView.subtitles.count {
+            playerView.switchSubtitle(subtitle: nil)
+        } else {
+            playerView.switchSubtitle(subtitle: playerView.subtitles[indexPath.row])
+        }
     }
 
     func subtitleTableViewController(_ subtitleTableViewController: SubtitleTableViewController, isLoadingFor indexPath: IndexPath) -> Bool {
