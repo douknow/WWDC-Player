@@ -276,15 +276,11 @@ class PlayerView: VideoView {
         let menu = UIAlertController(title: "清晰度", message: nil, preferredStyle: .actionSheet)
         let sdAction = UIAlertAction(title: "SD", style: .default) { [unowned self] _ in
             guard let url = self.videoDetail?.sd else { return }
-            let item = AVPlayerItem(url: url)
-            self.playerItem = item
-            sender.setTitle("SD", for: .normal)
+            self.changeVideo(to: url, for: "SD")
         }
         let hdAction = UIAlertAction(title: "HD", style: .default) { [unowned self] _ in
             guard let url = self.videoDetail?.hd else { return }
-            let item = AVPlayerItem(url: url)
-            self.playerItem = item
-            sender.setTitle("HD", for: .normal)
+            self.changeVideo(to: url, for: "HD")
         }
         menu.addAction(sdAction)
         menu.addAction(hdAction)
@@ -292,6 +288,15 @@ class PlayerView: VideoView {
         let splitVC = window?.rootViewController as! SplitViewController
         let vc = splitVC.viewControllers.last
         vc?.present(menu, animated: true, completion: nil)
+    }
+
+    func changeVideo(to url: URL, for title: String) {
+        let currentTime = self.playerItem?.currentTime() ?? .zero
+        let item = AVPlayerItem(url: url)
+        item.seek(to: currentTime, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: nil)
+        self.playerItem = item
+        self.player?.play()
+        resolutionButton.setTitle(title, for: .normal)
     }
 
     func loadSubtitles() {
