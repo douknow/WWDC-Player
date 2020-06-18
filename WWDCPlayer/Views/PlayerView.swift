@@ -44,12 +44,13 @@ class PlayerView: VideoView {
     var selectedSubtitle: Subtitle?
     var selectedSubtitleLines: [SubtitleLine]?
 
+    private var shouldUpdateProgressBar = true
+
     weak var delegate: PlayerViewDelegate?
 
     var videoDetail: VideoDetail? {
         didSet {
             if let videoDetail = videoDetail {
-//                let testURL = URL(string: "https://vod-progressive.akamaized.net/exp=1591268366~acl=%2A%2F1141237980.mp4%2A~hmac=893f4bd3ebed6dba792d0ba3e74370de9ba1960a1e9583a9c8f76540cc02ce26/vimeo-prod-skyfire-std-us/01/4821/11/299108997/1141237980.mp4?download=1&filename=Pexels+Videos+1570920.mp4")!
                 let playerItem = AVPlayerItem(url: videoDetail.sd)
                 self.playerItem = playerItem
                 loadSubtitles()
@@ -118,12 +119,16 @@ class PlayerView: VideoView {
             $0.width.equalTo(47)
         }
 
-        progressView = UISlider()
+        progressView = VideoProgressBar()
         progressView.value = 0
         progressView.setThumbImage(UIImage(systemName: "rhombus.fill"), for: .normal)
         progressView.setContentHuggingPriority(.init(1), for: .horizontal)
-        progressView.addTarget(self, action: #selector(progressBarChangeAction(_:)), for: .valueChanged)
+        progressView.addTarget(self, action: #selector(progressTouchDownAction(_:)), for: .touchDown)
+        progressView.addTarget(self, action: #selector(progressValueChangedAction(_:)), for: .valueChanged)
         progressView.addTarget(self, action: #selector(progressBarTouchUpAction(_:)), for: .touchUpInside)
+
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(progressBarTapAction(_:)))
+        progressView.addGestureRecognizer(tapRecognizer)
 
         allTimeLabel = UILabel()
         allTimeLabel.text = "00:00"
@@ -174,11 +179,13 @@ class PlayerView: VideoView {
         playerItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), options: [.old, .new], context: &isPlaybackLikelyToKeepUpContext)
 
         player?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1.0/60, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: .main, using: { [weak self] time in
-            self?.currentTimeLabel.text = time.seconds.hourSecondsFormat
             let percent = time.seconds / playerItem.duration.seconds
-            if !(self?.progressView.isHighlighted ?? true) {
+
+            if self?.shouldUpdateProgressBar ?? false {
                 self?.progressView.value = Float(percent)
+                self?.currentTimeLabel.text = time.seconds.hourSecondsFormat
             }
+
             if percent == 1 {
                 self?.playButton.setImage(self?.refreshImage, for: .normal)
             }
@@ -405,14 +412,43 @@ class PlayerView: VideoView {
         })
     }
 
-    @objc func progressBarChangeAction(_ sender: UISlider) {
+    @objc func progressValueChangedAction(_ sender: UISlider) {
+        guard let duration = playerItem?.duration else { return }
+        let current = CMTimeMultiplyByFloat64(duration, multiplier: Float64(sender.value))
+        currentTimeLabel.text = current.seconds.hourSecondsFormat
+    }
+
+    @objc func progressTouchDownAction(_ sender: UISlider) {
+        print("touch down")
+        shouldUpdateProgressBar = false
     }
 
     @objc func progressBarTouchUpAction(_ sender: UISlider) {
+
+        print("Slider did touch up : \(sender.value)")
+
+        updatePlayerProgress(to: progressView.value)
+    }
+
+    @objc func progressBarTapAction(_ recognizer: UITapGestureRecognizer) {
+        switch recognizer.state {
+        case .ended, .cancelled:
+            print("slider did tap up: \(progressView.value)")
+            updatePlayerProgress(to: progressView.value)
+        default:
+            break
+        }
+    }
+
+    func updatePlayerProgress(to progress: Float) {
         guard let playerItem = playerItem else { return }
+        shouldUpdateProgressBar = false
         let allTime = playerItem.duration
-        let current = CMTimeMultiplyByFloat64(allTime, multiplier: Float64(sender.value))
-        playerItem.seek(to: current, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: nil)
+        let current = CMTimeMultiplyByFloat64(allTime, multiplier: Float64(progress))
+        currentTimeLabel.text = current.seconds.hourSecondsFormat
+        playerItem.seek(to: current, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: { _ in
+            self.shouldUpdateProgressBar = true
+        })
     }
 
 }

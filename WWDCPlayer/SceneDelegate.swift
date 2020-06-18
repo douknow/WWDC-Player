@@ -87,6 +87,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
+#if targetEnvironment(macCatalyst)
+
 extension NSToolbarItem.Identifier {
     static let openInWeb = NSToolbarItem.Identifier("open-in-web")
 }
@@ -123,3 +125,4 @@ extension SceneDelegate: NSToolbarDelegate {
 
 }
 
+#endif
