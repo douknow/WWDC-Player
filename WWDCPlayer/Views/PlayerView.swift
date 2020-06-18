@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import SnapKit
 
 protocol PlayerViewDelegate: class {
     func playerView(_: PlayerView, subtitleTapped sender: UIButton?)
@@ -45,6 +46,7 @@ class PlayerView: VideoView {
     var subtitleCache: [URL: [SubtitleLine]] = [:]
     var selectedSubtitle: Subtitle?
     var selectedSubtitleLines: [SubtitleLine]?
+    var controlViewBottomOffsetConstraint: Constraint!
 
     weak var delegate: PlayerViewDelegate?
 
@@ -84,9 +86,6 @@ class PlayerView: VideoView {
         super.init(frame: frame)
 
         setupView()
-
-//        let hoverRecognizer = UIHoverGestureRecognizer(target: self, action: #selector(hoveringAction(_:)))
-//        addGestureRecognizer(hoverRecognizer)
     }
 
     required init?(coder: NSCoder) {
@@ -99,7 +98,8 @@ class PlayerView: VideoView {
         controlsView.layer.cornerRadius = 6
         addSubview(controlsView) {
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().offset(-10)
+            controlViewBottomOffsetConstraint = $0.bottom.equalToSuperview().offset(44).constraint
+            controlViewBottomOffsetConstraint.activate()
             $0.height.equalTo(44)
         }
 
@@ -181,6 +181,9 @@ class PlayerView: VideoView {
         subtitleView.addSubview(subtitleLabel) {
             $0.edges.equalToSuperview().inset(10)
         }
+
+        let hoverRecognizer = UIHoverGestureRecognizer(target: self, action: #selector(hoveringAction(_:)))
+        addGestureRecognizer(hoverRecognizer)
     }
 
     func setupObserver(_ playerItem: AVPlayerItem) {
@@ -376,14 +379,28 @@ class PlayerView: VideoView {
     @objc func hoveringAction(_ recognizer: UIHoverGestureRecognizer) {
         switch recognizer.state  {
         case .began:
-            showControlsView()
-//        case .changed:
-//            showControlsView()
+            moveControlViewToIdentify()
+        case .changed:
+            break
         case .ended, .cancelled:
-            hideControlsView()
+            moveControlViewToBottom()
         default:
             break
         }
+    }
+
+    func moveControlViewToBottom() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseIn], animations: {
+            self.controlViewBottomOffsetConstraint.update(offset: 44)
+            self.layoutIfNeeded()
+        }, completion: nil)
+    }
+
+    func moveControlViewToIdentify() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+            self.controlViewBottomOffsetConstraint.update(offset: -10)
+            self.layoutIfNeeded()
+        }, completion: nil)
     }
 
     func hideControlsView() {
