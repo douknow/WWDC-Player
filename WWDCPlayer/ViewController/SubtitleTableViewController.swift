@@ -41,7 +41,8 @@ class SubtitleTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CenterTextCell.identifier, for: indexPath) as! CenterTextCell
         let text = data[indexPath.row]
-        cell.config(text: text, isLoading: delegate?.subtitleTableViewController(self, isLoadingFor: indexPath) ?? false)
+        let isLoading = delegate?.subtitleTableViewController(self, isLoadingFor: indexPath) ?? false
+        cell.config(text: text, isLoading: isLoading)
         let color: UIColor = indexPath == selected ? .systemBlue : .systemBackground
         cell.label.textColor = color
         cell.selectionStyle = .none
@@ -86,6 +87,8 @@ class CenterTextCell: UITableViewCell {
         }
 
         indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = false
+        indicator.color = .white
         contentView.addSubview(indicator) {
             $0.trailing.equalToSuperview().inset(16)
             $0.centerY.equalTo(self.label)

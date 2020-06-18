@@ -33,6 +33,10 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
         return true
     }
 
+    deinit {
+        print("Video detail container deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -54,6 +58,8 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
         if isDownloaded {
             setupPlayer()
         }
+
+        print("video detail container did load")
     }
     
     override func viewWillAppear(_ animated: Bool) {

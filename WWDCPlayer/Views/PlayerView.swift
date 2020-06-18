@@ -16,6 +16,8 @@ protocol PlayerViewDelegate: class {
 
 class PlayerView: VideoView {
 
+    // MARK: - Views
+
     var playButton: UIButton!
     var indicator: UIActivityIndicatorView!
     var progressView: UISlider!
@@ -27,15 +29,15 @@ class PlayerView: VideoView {
     var subtitleView: UIView!
     var subtitleLabel: UILabel!
 
-    var statusObserver: NSKeyValueObservation?
+    let playImage = UIImage(systemName: "play.fill")
+    let pauseImage = UIImage(systemName: "pause.fill")
+    let refreshImage = UIImage(systemName: "arrow.clockwise")
 
     private var playerContext = 0
     private var isPlayBufferEmptyContext = 0
     private var isPlaybackLikelyToKeepUpContext = 0
-
-    let playImage = UIImage(systemName: "play.fill")
-    let pauseImage = UIImage(systemName: "pause.fill")
-    let refreshImage = UIImage(systemName: "arrow.clockwise")
+    private var shouldUpdateProgressBar = true
+    private var addCacheSubtitleQueue = DispatchQueue(label: "com.lcrystal.add-subtitle-queue", attributes: .concurrent)
 
     var video: Video?
     let downloader = Downloader()
@@ -44,9 +46,9 @@ class PlayerView: VideoView {
     var selectedSubtitle: Subtitle?
     var selectedSubtitleLines: [SubtitleLine]?
 
-    private var shouldUpdateProgressBar = true
-
     weak var delegate: PlayerViewDelegate?
+
+    // MARK: - Dynamic properties
 
     var videoDetail: VideoDetail? {
         didSet {
@@ -68,6 +70,14 @@ class PlayerView: VideoView {
                 setupObserver(item)
             }
         }
+    }
+
+    deinit {
+        playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), context: &playerContext)
+        playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackBufferEmpty), context: &isPlayBufferEmptyContext)
+        playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.isPlaybackLikelyToKeepUp), context: &isPlaybackLikelyToKeepUpContext)
+
+        print("player view deinit: \(self)")
     }
 
     override init(frame: CGRect) {
@@ -224,8 +234,8 @@ class PlayerView: VideoView {
                 print("ready to play ...")
                 // 1. hide loading animation
                 // 2. show play button
-                DispatchQueue.main.async { [unowned self] in
-                    self.configInfo()
+                DispatchQueue.main.async { [weak self] in
+                    self?.configInfo()
                 }
             case .failed:
                 print("failture")
@@ -294,11 +304,13 @@ class PlayerView: VideoView {
                     self.subtitles = subtitles.filter { $0.groupId == "subs" }
                     self.subtitleButton.isEnabled = true
                     self.subtitles.forEach {
-                        self.downloader.downloadSubtitleContent(subtitle: $0) { result in
+                        self.downloader.downloadSubtitleContent(subtitle: $0) { [weak self] result in
+                            guard let self = self else { return }
                             switch result {
                             case .success(let args):
                                 let (subtitle, content) = args
                                 self.completeDownloadSubtitle(subtitle: subtitle, content: content)
+                                print("Complete download subtitle: \(subtitle.name)")
                             case .failure(let error):
                                 print("Download subtitle error:  \(error.localizedDescription)")
                             }
@@ -327,9 +339,9 @@ class PlayerView: VideoView {
 
     func completeDownloadSubtitle(subtitle: Subtitle, content: String) {
         let lines = self.downloader.parseSubtitleContent(content: content)
-        subtitleCache[subtitle.url] = lines
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
+            self.subtitleCache[subtitle.url] = lines
             self.subtitleButton.isEnabled = true
             self.delegate?.playerView(self, completeCache: subtitle)
         }
@@ -343,6 +355,7 @@ class PlayerView: VideoView {
         print("switch to subtitle language: \(subtitle?.language ?? "NIL")")
         if let subtitle = subtitle {
             let subtitleLines = subtitleCache[subtitle.url]
+            print("subtitle lines: \(subtitleLines?.count ?? 0)")
             showSubtitle()
             selectedSubtitle = subtitle
             selectedSubtitleLines = subtitleLines
