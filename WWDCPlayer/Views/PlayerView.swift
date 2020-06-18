@@ -491,6 +491,8 @@ class PlayerView: VideoView {
 extension Double {
 
     var hourSecondsFormat: String {
+        guard !isNaN else { return "" }
+
         let duration = self
         let hour = Int(duration / 60)
         let seconds = Int(duration.truncatingRemainder(dividingBy: 60))
