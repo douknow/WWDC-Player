@@ -121,14 +121,14 @@ class VideoDetailViewController: UITableViewController {
     }
     
     func hdDownload() {
-        guard let videoDetail = videoDetail else { return }
-        let item = download(videoDetail.hd, resolution: .hd)
+        guard let videoDetail = videoDetail, let hd = videoDetail.hd else { return }
+        let item = download(hd, resolution: .hd)
         hdDownloadItem = item
     }
     
     func sdDownload() {
-        guard let videoDetail = videoDetail else { return }
-        let item = download(videoDetail.sd, resolution: .sd)
+        guard let videoDetail = videoDetail, let sd = videoDetail.sd else { return }
+        let item = download(sd, resolution: .sd)
         sdDownloadItem = item
     }
     
@@ -214,7 +214,11 @@ class VideoDetailViewController: UITableViewController {
             return cell
         case (1, 0):
             let cell = tableView.dequeueReusableCell(withIdentifier: IconsTableViewCell.identifier, for: indexPath) as! IconsTableViewCell
-            cell.icons = [UIImage(systemName: "square.and.arrow.down"), likedImage]
+            var icons = [likedImage]
+            if videoDetail?.sd != nil || videoDetail?.hd != nil {
+                icons.insert(UIImage(systemName: "square.and.arrow.down"), at: 0)
+            }
+            cell.icons = icons
             cell.selectionStyle = .none
             cell.backgroundColor = .clear
             cell.delegate = self
@@ -285,6 +289,7 @@ extension VideoDetailViewController: IconsTableViewCellDelegate {
     func iconsTableViewCell(_ iconsTableViewCell: IconsTableViewCell, didSelectedAt index: Int, source view: UIView) {
         switch index {
         case 0:
+            guard videoDetail?.hd != nil || videoDetail?.sd != nil else { return }
             downloadHandler(view)
         case 1:
             likeHandler(view as! UIButton)
@@ -301,8 +306,12 @@ extension VideoDetailViewController: IconsTableViewCellDelegate {
         let hdAction = UIAlertAction(title: "HD", style: .default) { [weak self] _ in
             self?.hdDownload()
         }
-        menu.addAction(sdAction)
-        menu.addAction(hdAction)
+        if videoDetail?.sd != nil {
+            menu.addAction(sdAction)
+        }
+        if videoDetail?.hd != nil {
+            menu.addAction(hdAction)
+        }
         menu.popoverPresentationController?.sourceView = sender
         present(menu, animated: true, completion: nil)
     }

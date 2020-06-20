@@ -88,8 +88,8 @@ class WWDCService {
                 let title = try infomation.select("h1").first()!.text()
                 let description = try infomation.select("p").first()!.text()
                 let otherInfo = try infomation.select(" > ul.links.small")
-                let hdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").first()!.attr("href")
-                let sdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").last()!.attr("href")
+                let hdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").first()?.attr("href") ?? ""
+                let sdDownloadURL = try otherInfo.select(" > li.download > ul > li > a").last()?.attr("href") ?? ""
 
                 let hFours = try infomation.select("h4")
                 var relatedVideo: [ShortVideoGroup] = []
@@ -107,7 +107,7 @@ class WWDCService {
                     relatedVideo.append(videoGroup)
                 }
                 
-                let videoDetail = VideoDetail(id: video.id!,title: title, description: description, m3u8URL: m3u8URL, hd: URL(string: hdDownloadURL)!, sd: URL(string: sdDownloadURL)!, relatedVideos: relatedVideo)
+                let videoDetail = VideoDetail(id: video.id!,title: title, description: description, m3u8URL: m3u8URL, hd: URL(string: hdDownloadURL), sd: URL(string: sdDownloadURL), relatedVideos: relatedVideo)
                 return videoDetail
             })
             .mapError { _ in 

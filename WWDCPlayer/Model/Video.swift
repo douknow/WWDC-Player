@@ -18,8 +18,8 @@ struct VideoDetail {
     let title: String
     let description: String
     let m3u8URL: URL
-    let hd: URL
-    let sd: URL
+    let hd: URL?
+    let sd: URL?
     let relatedVideos: [ShortVideoGroup]
 }
 
