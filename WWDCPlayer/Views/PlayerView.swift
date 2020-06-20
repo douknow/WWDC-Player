@@ -54,8 +54,8 @@ class PlayerView: VideoView {
 
     var videoDetail: VideoDetail? {
         didSet {
-            if let videoDetail = videoDetail {
-                let playerItem = AVPlayerItem(url: videoDetail.sd)
+            if let videoDetail = videoDetail, let sd = videoDetail.sd {
+                let playerItem = AVPlayerItem(url: sd)
                 self.playerItem = playerItem
                 loadSubtitles()
             }

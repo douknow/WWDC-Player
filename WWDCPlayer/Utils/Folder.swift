@@ -43,7 +43,7 @@ class Folder {
         let startStr: String
         switch resolution {
         case .hd:
-            startStr = "sub"
+            startStr = "subs"
         case .sd:
             startStr = "subs"
         }
