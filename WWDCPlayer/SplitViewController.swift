@@ -10,18 +10,21 @@ import UIKit
 
 class SplitViewController: UISplitViewController {
 
+    var coreDataStack: CoreDataStack!
+    var group: Group!
+
+    var menuViewController: UIViewController!
+    var detailViewController: UIViewController!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        delegate = self
-    }
+        view.backgroundColor = .systemGray6
 
-}
+        detailViewController = UIViewController()
+        detailViewController.view.backgroundColor = .systemBlue
 
-extension SplitViewController: UISplitViewControllerDelegate {
-
-    func splitViewController(_ splitViewController: UISplitViewController, collapseSecondary secondaryViewController: UIViewController, onto primaryViewController: UIViewController) -> Bool {
-        return true
+        viewControllers = [menuViewController, detailViewController]
     }
 
 }

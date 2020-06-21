@@ -32,6 +32,8 @@ class DownloadRelatedVideoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.navigationBar.isTranslucent = false
+
         segmentedControl = UISegmentedControl()
         segmentedControl.insertSegment(withTitle: "Downloaded", at: 0, animated: false)
         segmentedControl.insertSegment(withTitle: "Downloading", at: 1, animated: false)

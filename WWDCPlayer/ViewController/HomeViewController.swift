@@ -16,7 +16,7 @@ class HomeViewController: UITableViewController {
         static let videoCell = "VideoItemCell"
     }
     
-    @IBOutlet var indicator: UIActivityIndicatorView!
+    var indicator: UIActivityIndicatorView!
     
     @Published var isLoading = false
     @Published var videos: [Video] = []
@@ -30,8 +30,10 @@ class HomeViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setupView()
+
+        navigationController?.navigationBar.isTranslucent = false
         
         navigationController?.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifier.videoCell)
@@ -88,6 +90,7 @@ class HomeViewController: UITableViewController {
     }
     
     func setupView() {
+        indicator = UIActivityIndicatorView(style: .medium)
         view.addSubview(indicator) {
             $0.centerX.equalToSuperview()
             $0.centerY.equalToSuperview().multipliedBy(0.8)

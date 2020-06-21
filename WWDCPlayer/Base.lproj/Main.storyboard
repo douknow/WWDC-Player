@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qMs-jk-mSp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -324,7 +324,7 @@
         <!--Split View Controller-->
         <scene sceneID="HYg-Y8-zcL">
             <objects>
-                <splitViewController id="qMs-jk-mSp" customClass="SplitViewController" customModule="WWDCPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <splitViewController storyboardIdentifier="SplitViewController" id="qMs-jk-mSp" customClass="SplitViewController" customModule="WWDCPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Sqb-QF-K7z" kind="relationship" relationship="masterViewController" id="nO8-Mi-juR"/>
                         <segue destination="TJ0-bS-BsL" kind="relationship" relationship="detailViewController" id="Z6J-gk-AAM"/>

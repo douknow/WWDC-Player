@@ -36,6 +36,9 @@
 		5C4A0F74248501670026AAF6 /* AllVideoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */; };
 		5C8E3ABE24986D6E003FBF19 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3ABD24986D6E003FBF19 /* Folder.swift */; };
 		5C8E3AC0249B4971003FBF19 /* VideoProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3ABF249B4971003FBF19 /* VideoProgressBar.swift */; };
+		5C8E3AC2249F12FC003FBF19 /* RootSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3AC1249F12FC003FBF19 /* RootSplitViewController.swift */; };
+		5C8E3AC4249F1316003FBF19 /* SlideBarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3AC3249F1316003FBF19 /* SlideBarTableViewController.swift */; };
+		5C8E3AC6249F1F0C003FBF19 /* VideoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C8E3AC5249F1F0C003FBF19 /* VideoService.swift */; };
 		5CA1D73D248A3F8000934B7E /* fileSequence0.webvtt in Resources */ = {isa = PBXBuildFile; fileRef = 5CA1D73C248A3F8000934B7E /* fileSequence0.webvtt */; };
 		5CA1D73F248A5C2400934B7E /* SubtitleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA1D73E248A5C2400934B7E /* SubtitleTableViewController.swift */; };
 		5CA7A3582484E17400BBD67E /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CA7A3572484E17400BBD67E /* SplitViewController.swift */; };
@@ -109,6 +112,9 @@
 		5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllVideoTableViewController.swift; sourceTree = "<group>"; };
 		5C8E3ABD24986D6E003FBF19 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		5C8E3ABF249B4971003FBF19 /* VideoProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProgressBar.swift; sourceTree = "<group>"; };
+		5C8E3AC1249F12FC003FBF19 /* RootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSplitViewController.swift; sourceTree = "<group>"; };
+		5C8E3AC3249F1316003FBF19 /* SlideBarTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideBarTableViewController.swift; sourceTree = "<group>"; };
+		5C8E3AC5249F1F0C003FBF19 /* VideoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoService.swift; sourceTree = "<group>"; };
 		5CA1D73C248A3F8000934B7E /* fileSequence0.webvtt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fileSequence0.webvtt; sourceTree = "<group>"; };
 		5CA1D73E248A5C2400934B7E /* SubtitleTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleTableViewController.swift; sourceTree = "<group>"; };
 		5CA7A3572484E17400BBD67E /* SplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplitViewController.swift; sourceTree = "<group>"; };
@@ -286,6 +292,7 @@
 				5CD88D71240CE23B00948ADC /* WWDCService.swift */,
 				5C1E5C1A2488E5AE000CE9DF /* Downloader.swift */,
 				5CEBE12A241103340026C533 /* ContainerService.swift */,
+				5C8E3AC5249F1F0C003FBF19 /* VideoService.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -300,6 +307,8 @@
 				5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */,
 				5CEBE1272410D89B0026C533 /* PlayerViewController.swift */,
 				5C32BDFB248BC1CD00E60AB8 /* DownloadRelatedVideoViewController.swift */,
+				5C8E3AC1249F12FC003FBF19 /* RootSplitViewController.swift */,
+				5C8E3AC3249F1316003FBF19 /* SlideBarTableViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -463,6 +472,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CEBE12F24112D750026C533 /* VideoDetailContainerViewController.swift in Sources */,
+				5C8E3AC6249F1F0C003FBF19 /* VideoService.swift in Sources */,
 				5CD88D6B240CDF4E00948ADC /* VideoItemTableViewCell.swift in Sources */,
 				5CA7A35A2484E19800BBD67E /* CategoryViewController.swift in Sources */,
 				5C8E3ABE24986D6E003FBF19 /* Folder.swift in Sources */,
@@ -483,6 +493,7 @@
 				5C231FB0240D4A3B001E25A6 /* UIView+.swift in Sources */,
 				5C4A0F74248501670026AAF6 /* AllVideoTableViewController.swift in Sources */,
 				5C1E5C1324866736000CE9DF /* RelateVideoTableViewCell.swift in Sources */,
+				5C8E3AC2249F12FC003FBF19 /* RootSplitViewController.swift in Sources */,
 				5C1E5C192487D897000CE9DF /* IconsTableViewCell.swift in Sources */,
 				5C231FA9240D07E0001E25A6 /* HomeViewController.swift in Sources */,
 				5C8E3AC0249B4971003FBF19 /* VideoProgressBar.swift in Sources */,
@@ -493,6 +504,7 @@
 				5C1E5C1B2488E5AE000CE9DF /* Downloader.swift in Sources */,
 				5C32BE002496130D00E60AB8 /* DownloadData+Extension.swift in Sources */,
 				5C231FBD240E48FD001E25A6 /* DownloadItem.swift in Sources */,
+				5C8E3AC4249F1316003FBF19 /* SlideBarTableViewController.swift in Sources */,
 				5CD88D6F240CE13800948ADC /* Video.swift in Sources */,
 				5C1E5C0E24853714000CE9DF /* HomeTableHeaderView.swift in Sources */,
 			);

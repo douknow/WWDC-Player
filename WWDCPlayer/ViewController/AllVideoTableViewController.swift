@@ -22,6 +22,8 @@ class AllVideoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.navigationBar.isTranslucent = false
+
         title = group.title
         filteredVideos = group.videos
 
