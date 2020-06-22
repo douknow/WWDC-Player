@@ -103,9 +103,11 @@ class VideoDetailViewController: UITableViewController {
         
         service.videoDetail(by: video)
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { [unowned self] completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 // handle error
-            }) { [unowned self] videoDetail in
+            }) { [weak self] videoDetail in
+                guard let self = self else { return }
+
                 self.videoDetail = videoDetail
                 self.didLoadvideoDetail.send(videoDetail)
                 self.setupDownloadItem()
