@@ -16,6 +16,7 @@ class AllVideoTableViewController: UITableViewController {
 
     var group: Group!
     var filteredVideos: [Video] = []
+    var isSelectedIndexPath: IndexPath?
 
     let videoCellIdentifier = "video-cell-identifier"
 
@@ -65,6 +66,7 @@ class AllVideoTableViewController: UITableViewController {
         }
 
         let video = filteredVideos[indexPath.item]
+        cell.isSelection = isSelectedIndexPath == indexPath
         cell.config(video)
         return cell
     }
@@ -74,6 +76,14 @@ class AllVideoTableViewController: UITableViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "VideoDetailContainer") as! VideoDetailContainerViewController
         vc.video = video
+
+        var reloadPaths = [indexPath]
+        if let ip = isSelectedIndexPath {
+            reloadPaths.append(ip)
+        }
+        isSelectedIndexPath = indexPath
+        tableView.reloadRows(at: reloadPaths, with: .none)
+
         navigationController?.parent?.showDetailViewController(vc, sender: nil)
     }
 
