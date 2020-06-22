@@ -11,7 +11,7 @@ import AVKit
 import Combine
 import SnapKit
 
-class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerDelegate {
+class VideoDetailContainerViewController: UIViewController {
     
     var infoViewController: VideoDetailViewController!
     var playerView: PlayerView!
@@ -57,6 +57,7 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
 
         let tapRecongizer = UITapGestureRecognizer(target: self, action: #selector(hideSubtitleChooseMenu))
         playerView.addGestureRecognizer(tapRecongizer)
+        tapRecongizer.delegate = self
 
         if isDownloaded {
             setupPlayer()
@@ -160,6 +161,7 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
             self.subtitleViewController?.view.removeFromSuperview()
             self.subtitleViewController?.removeFromParent()
             self.subtitleViewController?.didMove(toParent: nil)
+            self.subtitleViewController = nil
 
             self.playerView.showControlsView()
         }
@@ -219,6 +221,14 @@ extension VideoDetailContainerViewController: SubtitleTableViewControllerDelegat
     func subtitleTableViewController(_ subtitleTableViewController: SubtitleTableViewController, isLoadingFor indexPath: IndexPath) -> Bool {
         if indexPath.row >= playerView.subtitles.count { return false }
         return !playerView.hasCached(with: playerView.subtitles[indexPath.row])
+    }
+
+}
+
+extension VideoDetailContainerViewController: UIGestureRecognizerDelegate {
+
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return subtitleViewController != nil
     }
 
 }

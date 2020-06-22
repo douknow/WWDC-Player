@@ -55,6 +55,8 @@ class PlayerView: VideoView {
     var controlViewBottomOffsetConstraint: Constraint!
 
     private(set) var screenMode: ScreenMode = .normal
+    private var isControlsHidden = true
+    private var tapGesture: UITapGestureRecognizer!
 
     weak var delegate: PlayerViewDelegate?
 
@@ -204,8 +206,17 @@ class PlayerView: VideoView {
             $0.edges.equalToSuperview().inset(10)
         }
 
+        #if targetEnvironment(macCatalyst)
+
         let hoverRecognizer = UIHoverGestureRecognizer(target: self, action: #selector(hoveringAction(_:)))
         addGestureRecognizer(hoverRecognizer)
+
+        #else
+
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction(_:)))
+        addGestureRecognizer(tapGesture)
+
+        #endif
     }
 
     func setupObserver(_ playerItem: AVPlayerItem) {
@@ -307,9 +318,7 @@ class PlayerView: VideoView {
         menu.addAction(sdAction)
         menu.addAction(hdAction)
         menu.popoverPresentationController?.sourceView = sender
-        let splitVC = window?.rootViewController as! SplitViewController
-        let vc = splitVC.viewControllers.last
-        vc?.present(menu, animated: true, completion: nil)
+        window?.rootViewController?.present(menu, animated: true, completion: nil)
     }
 
     func changeVideo(to url: URL, for title: String) {
@@ -407,12 +416,25 @@ class PlayerView: VideoView {
         switch recognizer.state  {
         case .began:
             showControls()
+            isControlsHidden = false
         case .changed:
             break
         case .ended, .cancelled:
             hideControls()
+            isControlsHidden = true
         default:
             break
+        }
+    }
+
+    @objc func tapAction(_ recognizer: UITapGestureRecognizer) {
+        print("Tap action worked")
+        if isControlsHidden {
+            isControlsHidden = false
+            showControls()
+        } else {
+            isControlsHidden = true
+            hideControls()
         }
     }
 
