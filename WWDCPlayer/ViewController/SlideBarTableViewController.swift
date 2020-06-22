@@ -53,24 +53,32 @@ class SlideBarTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: imageCellIdentifier, for: indexPath) as? SlideBarTableViewCell else { fatalError() }
 
         let imageName: String
+        let unSelectedImageName: String
 
         switch (indexPath.section, indexPath.row) {
         case (0, 0):
             imageName = "sun.min.fill"
+            unSelectedImageName = "sun.min"
         case (0, 1):
             imageName = "flame.fill"
+            unSelectedImageName = "flame"
         case (0, 2):
             imageName = "square.stack.3d.up.fill"
+            unSelectedImageName = "square.stack.3d.up"
         case (1, 0):
             imageName = "heart.fill"
+            unSelectedImageName = "heart"
         case (1, 1):
             imageName = "square.and.arrow.down.fill"
+            unSelectedImageName = "square.and.arrow.down"
         default:
             imageName = ""
+            unSelectedImageName = ""
         }
 
         let image = UIImage(systemName: imageName)
-        cell.config(image: image, selected: selectedIndexPath == indexPath)
+        let unSelectedImage = UIImage(systemName: unSelectedImageName)
+        cell.config(image: image, unSelectedImage: unSelectedImage, selected: selectedIndexPath == indexPath)
         cell.selectionStyle = .none
         return cell
     }
@@ -106,8 +114,9 @@ class SlideBarTableViewCell: UITableViewCell {
         }
     }
 
-    func config(image: UIImage?, selected: Bool) {
-        contentImageView.image = image
+    func config(image: UIImage?, unSelectedImage: UIImage?, selected: Bool) {
+        contentImageView.image = selected ? image : unSelectedImage
+        contentImageView.tintColor = selected ? .systemBlue : .label
         contentView.backgroundColor = selected ? .systemGray6 : .clear
     }
 
