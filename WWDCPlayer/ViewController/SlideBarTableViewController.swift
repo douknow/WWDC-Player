@@ -29,7 +29,7 @@ class SlideBarTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 65
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -60,8 +60,8 @@ class SlideBarTableViewController: UITableViewController {
             imageName = "sun.min.fill"
             unSelectedImageName = "sun.min"
         case (0, 1):
-            imageName = "flame.fill"
-            unSelectedImageName = "flame"
+            imageName = "star.fill"
+            unSelectedImageName = "star"
         case (0, 2):
             imageName = "square.stack.3d.up.fill"
             unSelectedImageName = "square.stack.3d.up"
@@ -77,7 +77,8 @@ class SlideBarTableViewController: UITableViewController {
         }
 
         let image = UIImage(systemName: imageName)
-        let unSelectedImage = UIImage(systemName: unSelectedImageName)
+        let config = UIImage.SymbolConfiguration(weight: .light)
+        let unSelectedImage = UIImage(systemName: unSelectedImageName, withConfiguration: config)
         cell.config(image: image, unSelectedImage: unSelectedImage, selected: selectedIndexPath == indexPath)
         cell.selectionStyle = .none
         return cell
@@ -109,7 +110,7 @@ class SlideBarTableViewCell: UITableViewCell {
         contentImageView = UIImageView()
         contentImageView.contentMode = .scaleAspectFit
         contentView.addSubview(contentImageView) {
-            $0.width.height.equalTo(44)
+            $0.width.height.equalTo(32)
             $0.center.equalToSuperview()
         }
     }
@@ -117,7 +118,6 @@ class SlideBarTableViewCell: UITableViewCell {
     func config(image: UIImage?, unSelectedImage: UIImage?, selected: Bool) {
         contentImageView.image = selected ? image : unSelectedImage
         contentImageView.tintColor = selected ? .systemBlue : .label
-        contentView.backgroundColor = selected ? .systemGray6 : .clear
     }
 
 }

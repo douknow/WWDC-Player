@@ -22,6 +22,9 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
     var subscriptions = Set<AnyCancellable>()
     var subtitleViewController: SubtitleTableViewController?
 
+    var playerViewAspectConstraint: Constraint!
+    var playerViewBottomConstraint: Constraint!
+
     var showingSubtitleMenu = false
 
     var isDownloaded: Bool {
@@ -92,7 +95,10 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
         view.addSubview(playerView) {
             $0.left.right.equalToSuperview()
             $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            $0.height.equalTo(self.view.snp.width).multipliedBy(self.playerViewAspect)
+            playerViewAspectConstraint = $0.height.equalTo(self.view.snp.width).multipliedBy(self.playerViewAspect).constraint
+            playerViewAspectConstraint.activate()
+            playerViewBottomConstraint = $0.bottom.equalToSuperview().constraint
+            playerViewBottomConstraint.deactivate()
         }
 
         infoViewController.willMove(toParent: self)
@@ -164,13 +170,36 @@ class VideoDetailContainerViewController: UIViewController, UIGestureRecognizerD
 
 extension VideoDetailContainerViewController: PlayerViewDelegate {
 
-    func playerView(_: PlayerView, subtitleTapped sender: UIButton?) {
+    func playerView(_ playerView: PlayerView, subtitleTapped sender: UIButton?) {
         showSubtitleChooseMenu()
     }
 
-    func playerView(_: PlayerView, completeCache subtitle: Subtitle) {
+    func playerView(_ playerView: PlayerView, completeCache subtitle: Subtitle) {
         let index = playerView.subtitles.firstIndex { $0.url == subtitle.url }!
         subtitleViewController?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+    }
+
+    func playerView(_ playerView: PlayerView, fullScreenButtonDidTapped button: UIButton) {
+        guard let splitVC = parent as? UISplitViewController else { return }
+
+        switch playerView.screenMode {
+        case .normal:
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseIn], animations: {
+                splitVC.preferredDisplayMode = .primaryHidden
+                self.playerViewAspectConstraint.deactivate()
+                self.playerViewBottomConstraint.activate()
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            playerView.switchScreenMode(to: .fullScreen)
+        case .fullScreen:
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+                splitVC.preferredDisplayMode = .allVisible
+                self.playerViewBottomConstraint.deactivate()
+                self.playerViewAspectConstraint.activate()
+                self.view.layoutIfNeeded()
+            }, completion: nil)
+            playerView.switchScreenMode(to: .normal)
+        }
     }
 
 }

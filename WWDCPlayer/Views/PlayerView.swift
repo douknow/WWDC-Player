@@ -11,11 +11,16 @@ import AVKit
 import SnapKit
 
 protocol PlayerViewDelegate: class {
-    func playerView(_: PlayerView, subtitleTapped sender: UIButton?)
-    func playerView(_: PlayerView, completeCache subtitle: Subtitle)
+    func playerView(_ playerView: PlayerView, subtitleTapped sender: UIButton?)
+    func playerView(_ playerView: PlayerView, completeCache subtitle: Subtitle)
+    func playerView(_ playerView: PlayerView, fullScreenButtonDidTapped button: UIButton)
 }
 
 class PlayerView: VideoView {
+
+    enum ScreenMode {
+        case fullScreen, normal
+    }
 
     // MARK: - Views
 
@@ -29,6 +34,7 @@ class PlayerView: VideoView {
     var controlsView: UIView!
     var subtitleView: UIView!
     var subtitleLabel: UILabel!
+    var fullScreenButton: UIButton!
 
     let playImage = UIImage(systemName: "play.fill")
     let pauseImage = UIImage(systemName: "pause.fill")
@@ -47,6 +53,8 @@ class PlayerView: VideoView {
     var selectedSubtitle: Subtitle?
     var selectedSubtitleLines: [SubtitleLine]?
     var controlViewBottomOffsetConstraint: Constraint!
+
+    private(set) var screenMode: ScreenMode = .normal
 
     weak var delegate: PlayerViewDelegate?
 
@@ -85,6 +93,8 @@ class PlayerView: VideoView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        backgroundColor = .black
+
         setupView()
     }
 
@@ -93,6 +103,18 @@ class PlayerView: VideoView {
     }
 
     func setupView() {
+        fullScreenButton = UIButton(type: .system)
+        fullScreenButton.alpha = 0
+        fullScreenButton.tintColor = .white
+        fullScreenButton.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        fullScreenButton.layer.cornerRadius = 8
+        fullScreenButton.setImage(UIImage(systemName: "arrow.up.left.and.arrow.down.right"), for: .normal)
+        fullScreenButton.addTarget(self, action: #selector(fullScreenButtonAction(_:)), for: .touchUpInside)
+        addSubview(fullScreenButton) {
+            $0.width.height.equalTo(44)
+            $0.leading.top.equalToSuperview().inset(16)
+        }
+
         controlsView = UIView()
         controlsView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
         controlsView.layer.cornerRadius = 6
@@ -384,13 +406,27 @@ class PlayerView: VideoView {
     @objc func hoveringAction(_ recognizer: UIHoverGestureRecognizer) {
         switch recognizer.state  {
         case .began:
-            moveControlViewToIdentify()
+            showControls()
         case .changed:
             break
         case .ended, .cancelled:
-            moveControlViewToBottom()
+            hideControls()
         default:
             break
+        }
+    }
+
+    func showControls() {
+        moveControlViewToIdentify()
+        UIView.animate(withDuration: 0.25) {
+            self.fullScreenButton.alpha = 1
+        }
+    }
+
+    func hideControls() {
+        moveControlViewToBottom()
+        UIView.animate(withDuration: 0.25) {
+            self.fullScreenButton.alpha = 0
         }
     }
 
@@ -484,6 +520,22 @@ class PlayerView: VideoView {
         playerItem.seek(to: current, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: { _ in
             self.shouldUpdateProgressBar = true
         })
+    }
+
+    @objc func fullScreenButtonAction(_ sender: UIButton) {
+        delegate?.playerView(self, fullScreenButtonDidTapped: sender)
+    }
+
+    func switchScreenMode(to mode: ScreenMode) {
+        screenMode = mode
+        let fullScreenButtonImageName: String
+        switch mode {
+        case .normal:
+            fullScreenButtonImageName = "arrow.up.left.and.arrow.down.right"
+        case .fullScreen:
+            fullScreenButtonImageName = "arrow.down.right.and.arrow.up.left"
+        }
+        fullScreenButton.setImage(UIImage(systemName: fullScreenButtonImageName), for: .normal)
     }
 
 }

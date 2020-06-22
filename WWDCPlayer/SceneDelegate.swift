@@ -29,39 +29,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not neccessarily discarded (see `application:didDiscardSceneSessions` instead).
-    }
-
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
-    }
-
-    func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
-    }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
-    }
-
     func setupToolBar(_ scene: UIScene) {
         #if targetEnvironment(macCatalyst)
         if let scene = scene as? UIWindowScene,
             let titleBar = scene.titlebar {
-
+            titleBar.autoHidesToolbarInFullScreen = true
             titleBar.titleVisibility = .hidden
 
             let toolBar = NSToolbar(identifier: "toolbar")
@@ -79,26 +51,42 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 extension NSToolbarItem.Identifier {
     static let openInWeb = NSToolbarItem.Identifier("open-in-web")
+    static let leftWindow = NSToolbarItem.Identifier("left-window")
 }
 
 extension SceneDelegate: NSToolbarDelegate {
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.openInWeb]
+        return [.openInWeb, .leftWindow]
     }
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
-        return [.flexibleSpace, .openInWeb]
+        return [.leftWindow, .flexibleSpace, .openInWeb]
     }
 
     func toolbar(_ toolbar: NSToolbar, itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier, willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
         var item: NSToolbarItem? = nil
-        let barButtonItem = UIBarButtonItem(image: UIImage(systemName: "safari"), style: .plain, target: self, action: #selector(openInWeb))
-        item = NSToolbarItem(itemIdentifier: itemIdentifier, barButtonItem: barButtonItem)
-        item?.toolTip = "Open in web"
-        item?.label = "Open in web"
-        item?.target = self
-        item?.action = #selector(openInWeb)
+
+        switch itemIdentifier {
+        case .openInWeb:
+
+            let barButtonItem = UIBarButtonItem(image: UIImage(systemName: "safari"), style: .plain, target: self, action: #selector(openInWeb))
+            item = NSToolbarItem(itemIdentifier: itemIdentifier, barButtonItem: barButtonItem)
+            item?.toolTip = "Open in web"
+            item?.label = "Open in web"
+            item?.target = self
+            item?.action = #selector(openInWeb)
+
+        case .leftWindow:
+            let barButtonItem = UIBarButtonItem(image: UIImage(systemName: "sidebar.left"), style: .plain, target: self, action: #selector(openInWeb))
+            item = NSToolbarItem(itemIdentifier: itemIdentifier, barButtonItem: barButtonItem)
+            item?.toolTip = "Hide or show Side bar"
+            item?.label = ""
+            item?.target = self
+            item?.action = #selector(leftWindowAction)
+        default:
+            break
+        }
         return item
     }
 
@@ -108,6 +96,19 @@ extension SceneDelegate: NSToolbarDelegate {
         if let relatedURL = detailVC.video?.urlStr {
             let url = WWDCService.Endpoint.basic.appendingPathComponent(relatedURL)
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+
+    @objc func leftWindowAction() {
+        let splitVC = (window?.rootViewController as! UISplitViewController)
+        if splitVC.displayMode == .allVisible {
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseIn], animations: {
+                splitVC.preferredDisplayMode = .primaryHidden
+            }, completion: nil)
+        } else {
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.curveEaseOut], animations: {
+                splitVC.preferredDisplayMode = .allVisible
+            }, completion: nil)
         }
     }
 

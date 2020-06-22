@@ -38,6 +38,8 @@ class RootSplitViewController: UISplitViewController {
 
         maximumPrimaryColumnWidth = 100
         maximumPrimaryColumnWidth = 100
+
+        primaryBackgroundStyle = .sidebar
     }
 
     func updateDetail(indexPath: IndexPath) {

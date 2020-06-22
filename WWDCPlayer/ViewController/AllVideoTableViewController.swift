@@ -72,6 +72,8 @@ class AllVideoTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath != isSelectedIndexPath else { return }
+
         let video = filteredVideos[indexPath.item]
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "VideoDetailContainer") as! VideoDetailContainerViewController

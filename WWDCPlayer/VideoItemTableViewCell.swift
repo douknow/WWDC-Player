@@ -53,7 +53,6 @@ class VideoItemTableViewCell: UITableViewCell {
         case .began:
             if !isSelection {
                 backgroundColor = .systemGray6
-                print("hover start: un selected and set background")
             }
         case .ended, .cancelled:
             if !isSelection {
