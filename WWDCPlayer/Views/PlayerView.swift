@@ -202,6 +202,7 @@ class PlayerView: VideoView {
         subtitleLabel.textColor = .systemBackground
         subtitleLabel.text = " "
         subtitleLabel.numberOfLines = 0
+        subtitleLabel.font = UIFont.systemFont(ofSize: 24)
         subtitleView.addSubview(subtitleLabel) {
             $0.edges.equalToSuperview().inset(10)
         }
