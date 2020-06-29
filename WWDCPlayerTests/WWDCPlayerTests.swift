@@ -57,7 +57,10 @@ class WWDCPlayerTests: XCTestCase {
         let url = Bundle(for: WWDCPlayerTests.self).url(forResource: "fileSequence0", withExtension: "webvtt")!
         let content = try! String(contentsOf: url)
         let downloader = Downloader()
-        downloader.parseSubtitleContent(content: content)
+        let lines = downloader.parseSubtitleContent(content: content)
+        for line in lines {
+            print(line.value + "---")
+        }
     }
 
     func testPerformanceExample() throws {

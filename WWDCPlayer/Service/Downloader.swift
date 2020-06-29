@@ -82,7 +82,7 @@ class Downloader {
     }
 
     func parseSubtitleContent(content: String) -> [SubtitleLine] {
-        let reg = #"(\d{2}:\d{2}:\d{2}.\d{3}) --> (\d{2}:\d{2}:\d{2}.\d{3}).*\n(.*)$"#
+        let reg = #"(\d{2}:\d{2}:\d{2}.\d{3}) --> (\d{2}:\d{2}:\d{2}.\d{3}).*\n([\s\S]*?)\n\n"#
         let groups = try! content.findGroup(regex: reg)
 
         return groups.map { group -> SubtitleLine in
