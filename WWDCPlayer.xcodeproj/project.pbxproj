@@ -110,6 +110,7 @@
 		5C32BDFD248BC2F900E60AB8 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		5C32BDFF2496130D00E60AB8 /* DownloadData+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadData+Extension.swift"; sourceTree = "<group>"; };
 		5C4A0F73248501670026AAF6 /* AllVideoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllVideoTableViewController.swift; sourceTree = "<group>"; };
+		5C5533A1267687600083A2E9 /* preview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = preview.png; sourceTree = "<group>"; };
 		5C8E3ABD24986D6E003FBF19 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
 		5C8E3ABF249B4971003FBF19 /* VideoProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProgressBar.swift; sourceTree = "<group>"; };
 		5C8E3AC1249F12FC003FBF19 /* RootSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSplitViewController.swift; sourceTree = "<group>"; };
@@ -216,6 +217,14 @@
 			path = Detail;
 			sourceTree = "<group>";
 		};
+		5C5533A0267687500083A2E9 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				5C5533A1267687600083A2E9 /* preview.png */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		5C8E3ABC24986D60003FBF19 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +236,7 @@
 		5CD88D48240CDEAC00948ADC = {
 			isa = PBXGroup;
 			children = (
+				5C5533A0267687500083A2E9 /* Assets */,
 				5CD88D53240CDEAC00948ADC /* WWDCPlayer */,
 				5C2200962484D172004BF8E1 /* DataDownloader */,
 				5C1E5C2D2488F5BF000CE9DF /* WWDCPlayerTests */,
